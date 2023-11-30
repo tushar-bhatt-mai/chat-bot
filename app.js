@@ -10,6 +10,7 @@ const loggedInUserData = (data) => {
   const roundedData = document.getElementById("roundedName");
   var imgElement = document.createElement('img');
     imgElement.src = `${data?.profile_picture_url}`;
+    imgElement.classList.add("imgStyle")
   data?.profile_picture_url !== "NA" ? roundedData.appendChild(imgElement) : data?.display_name ? (roundedData.style.backgroundColor = "#6d1874", roundedData.innerHTML = `${roundedValue}`) : roundedData.style.backgroundColor = "transparen";
   // roundedData.innerHTML = `${roundedValue}`;
 }
