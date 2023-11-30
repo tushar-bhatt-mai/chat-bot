@@ -18,8 +18,8 @@ const loggedInUserData = (data) => {
     : "";
   roundedData.innerHTML = `${roundedValue}`;
   const chatNavbar = document.getElementById("chat-Navbar");
-  chatBotResult?.background_colour
-    ? (chatNavbar.style.backgroundColor = chatBotResult?.background_colour)
+  data?.background_colour
+    ? (chatNavbar.style.backgroundColor = data?.background_colour)
     : (chatNavbar.style.backgroundColor = "#000000");
 };
 function initialMessage() {
