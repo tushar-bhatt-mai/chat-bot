@@ -1,4 +1,7 @@
 const chatBox = document.getElementById("chat-box");
+const loader = document.createElement("div");
+chatBox.appendChild(loader);
+loader.classList.add("loader")
 const userInput = document.getElementById("user-input");
 const baseUrl = "https://dev-maibot-predictionapi.p2eppl.com/";
 let chatBotResult = {};
@@ -6,22 +9,36 @@ const params = parseQueryString(window.location.href);
 let accessToken = params?.token;
 let refreshToken = params?.refreshToken;
 const loggedInUserData = (data) => {
-  const roundedValue = data?.display_name.split(" ").map((word) => word[0]).join("");
+  const roundedValue = data?.display_name
+    .split(" ")
+    .map((word) => word[0])
+    .join("");
   const roundedData = document.getElementById("roundedName");
-  var imgElement = document.createElement('img');
-    imgElement.src = `${data?.profile_picture_url}`;
-    imgElement.classList.add("imgStyle")
-  data?.profile_picture_url !== "NA" ? roundedData.appendChild(imgElement) : data?.display_name ? (roundedData.style.backgroundColor = "#6d1874", roundedData.innerHTML = `${roundedValue}`) : roundedData.style.backgroundColor = "transparen";
+  var imgElement = document.createElement("img");
+  imgElement.src = `${data?.profile_picture_url}`;
+  imgElement.classList.add("imgStyle");
+  data?.profile_picture_url !== "NA"
+    ? roundedData.appendChild(imgElement)
+    : data?.display_name
+    ? ((roundedData.style.backgroundColor = "#6d1874"),
+      (roundedData.innerHTML = `${roundedValue}`))
+    : (roundedData.style.backgroundColor = "transparen");
   // roundedData.innerHTML = `${roundedValue}`;
-}
+};
 function initialMessage() {
-  loggedInUserData(chatBotResult)
+  loggedInUserData(chatBotResult);
   const chatNavbar = document.getElementById("chat-Navbar");
-  chatBotResult?.background_colour ? chatNavbar.style.backgroundColor = chatBotResult?.background_colour :  chatNavbar.classList.add("bgColor");
+  chatBotResult?.background_colour
+    ? (chatNavbar.style.backgroundColor = chatBotResult?.background_colour)
+    : chatNavbar.classList.add("bgColor");
   const displayChatWith = document.getElementById("display-chat");
-  chatBotResult?.display_name ? displayChatWith.innerHTML = "Chat With" : displayChatWith.innerHTML = ""
+  chatBotResult?.display_name
+    ? (displayChatWith.innerHTML = "Chat With")
+    : (displayChatWith.innerHTML = "");
   const displayName = document.getElementById("display-name");
-  displayName.innerHTML = `${chatBotResult?.display_name ? chatBotResult?.display_name : ``}`;
+  displayName.innerHTML = `${
+    chatBotResult?.display_name ? chatBotResult?.display_name : ``
+  }`;
   const initialValue = document.getElementById("initialValue");
   initialValue.innerHTML = `<span class='bot-message'>${
     chatBotResult?.initial_message
@@ -29,11 +46,14 @@ function initialMessage() {
       : `Initial Message`
   }</span>`;
   initialValue.style.fontSize = chatBotResult?.font_size || "12px";
-  initialValue.style.fontFamily = chatBotResult?.font_style || "Arial, sans-serif";
+  initialValue.style.fontFamily =
+    chatBotResult?.font_style || "Arial, sans-serif";
   displaySuggestedMessages(chatBotResult?.suggested_messages || []);
 }
 function displaySuggestedMessages(suggestedMessages) {
-  const suggestedMessagesContainer = document.getElementById("suggested-messages");
+  const suggestedMessagesContainer = document.getElementById(
+    "suggested-messages"
+  );
   suggestedMessagesContainer.innerHTML = "";
   suggestedMessages.forEach((message) => {
     const suggestionButton = document.createElement("button");
@@ -50,7 +70,9 @@ function fillInputAndSendMessage(message) {
   userInput.value = message;
   sendMessage();
   // By default, hide the suggestion second time
-  const suggestedMessagesContainer = document.getElementById("suggested-messages");
+  const suggestedMessagesContainer = document.getElementById(
+    "suggested-messages"
+  );
   suggestedMessagesContainer.style.display = "none";
 }
 function parseQueryString(url) {
@@ -79,9 +101,10 @@ function sendMessage() {
   fetch(baseUrl, requestOptions)
     .then((response) => response.text())
     .then((result) => {
-      var parsedResult = JSON.parse(result || "{}")
-      console.log("parse result", );
-      if (parsedResult.StatusCode==401) {
+      var parsedResult = JSON.parse(result || "{}");
+      console.log("parse result");
+      if (parsedResult.StatusCode == 401) {
+        // loader.classList.add("display")
         // Refresh the access token
         fetchRefreshtoken();
         displayMessage("Something went Wrong, Please try again", "bot");
@@ -91,11 +114,17 @@ function sendMessage() {
         // Process the result as usual
         const str = JSON.stringify(result);
         displayMessage(JSON.parse(result)?.message, "bot");
-        const suggestedMessagesContainer = document.getElementById("suggested-messages");
+        // For removing suggested message from chat bot
+        const suggestedMessagesContainer = document.getElementById(
+          "suggested-messages"
+        );
         suggestedMessagesContainer.style.display = "none";
       }
     })
-    .catch((error) => console.error("error", error));
+    .catch((error) => {
+      loader.style.display = 'none'
+      console.error("error", error);
+    });
 }
 function getChatbotDetails() {
   const myHeaders = new Headers();
@@ -109,7 +138,10 @@ function getChatbotDetails() {
     body: formdata,
     redirect: "follow",
   };
-  fetch("https://dev-maibot-chatbot-detailapi.p2eppl.com/get_chatbot_customization", requestOptions)
+  fetch(
+    "https://dev-maibot-chatbot-detailapi.p2eppl.com/get_chatbot_customization",
+    requestOptions
+  )
     .then((response) => response.text())
     .then((result) => {
       const parsedResult = JSON.parse(result);
@@ -122,7 +154,14 @@ function getChatbotDetails() {
 }
 function displayMessage(message, sender) {
   const messageElement = document.createElement("div");
-  messageElement.classList.add(sender === "user" ? "user-messageDev" : "bot-messageDev");
+  messageElement.classList.add(
+    sender === "user" ? "user-messageDev" : "bot-messageDev"
+  );
+  if(sender == "user"){
+    loader.style.display = 'block'
+  }else{
+    loader.style.display = 'none'
+  }
   const textSpan = document.createElement("span");
   textSpan.classList.add(sender === "user" ? "user-message" : "bot-message");
   textSpan.textContent = message;
@@ -132,15 +171,18 @@ function displayMessage(message, sender) {
 getChatbotDetails();
 const fetchRefreshtoken = async () => {
   try {
-    const response = await fetch(`https://dev-auth2api.p2eppl.com/auth/refresh`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        "refresh_token": refreshToken,
-      }),
-    });
+    const response = await fetch(
+      `https://dev-auth2api.p2eppl.com/auth/refresh`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          refresh_token: refreshToken,
+        }),
+      }
+    );
     const responseData = await response.json();
     if (responseData?.result) {
       accessToken = responseData?.result?.access_token;
