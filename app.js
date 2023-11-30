@@ -12,8 +12,9 @@ const loggedInUserData = (data) => {
   //   .join("");
   const roundedData = document.getElementById("roundedName");
   var imgElement = document.createElement("img");
+  roundedData.imgElement.src = `${data?.profile_picture_url}`
   data?.profile_picture_url
-    ? (roundedData.imgElement.src = `${data?.profile_picture_url}`)
+    ? (roundedData.appendChild(imgElement))
     : "";
   roundedData.innerHTML = `${roundedValue}`;
   const chatNavbar = document.getElementById("chat-Navbar");
