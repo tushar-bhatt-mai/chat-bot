@@ -25,7 +25,8 @@ function initialMessage() {
       ? chatBotResult?.initial_message
       : `Initial Message`
   }</span>`;
-  initialValue.style.backgroundColor = chatBotResult?.background_colour || "";
+  const chatNavbar = document.getElementById("chat-Navbar");
+  chatNavbar.style.backgroundColor = chatBotResult?.background_colour || "";
   initialValue.style.fontSize = chatBotResult?.font_size || "12px";
   initialValue.style.fontFamily = chatBotResult?.font_style || "Arial, sans-serif";
   displaySuggestedMessages(chatBotResult?.suggested_messages || []);
