@@ -91,6 +91,8 @@ function sendMessage() {
         // Process the result as usual
         const str = JSON.stringify(result);
         displayMessage(JSON.parse(result)?.message, "bot");
+        const suggestedMessagesContainer = document.getElementById("suggested-messages");
+        suggestedMessagesContainer.style.display = "none";
       }
     })
     .catch((error) => console.error("error", error));
