@@ -14,7 +14,7 @@ const loggedInUserData = (data) => {
 function initialMessage() {
   loggedInUserData(chatBotResult)
   const chatNavbar = document.getElementById("chat-Navbar");
-  chatNavbar.style.backgroundColor = chatBotResult?.background_colour || "black";
+  chatBotResult?.background_colour ? chatNavbar.style.backgroundColor = chatBotResult?.background_colour :  chatNavbar.style.backgroundColor = "black";
   const displayChatWith = document.getElementById("display-chat");
   chatBotResult?.display_name ? displayChatWith.innerHTML = "Chat With" : displayChatWith.innerHTML = ""
   const displayName = document.getElementById("display-name");
