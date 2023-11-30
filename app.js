@@ -8,8 +8,10 @@ let refreshToken = params?.refreshToken;
 const loggedInUserData = (data) => {
   const roundedValue = data?.display_name.split(" ").map((word) => word[0]).join("");
   const roundedData = document.getElementById("roundedName");
-  data?.display_name ? roundedData.style.backgroundColor = "#6d1874" : roundedData.style.backgroundColor = "transparen";
-  roundedData.innerHTML = `${roundedValue}`;
+  var imgElement = document.createElement('img');
+    imgElement.src = `${data?.profile_picture_url}`;
+  data?.profile_picture_url ? roundedData.appendChild(imgElement) : roundedData.style.backgroundColor = "transparen";
+  // roundedData.innerHTML = `${roundedValue}`;
 }
 function initialMessage() {
   loggedInUserData(chatBotResult)
