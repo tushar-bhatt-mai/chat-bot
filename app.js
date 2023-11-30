@@ -6,14 +6,15 @@ const params = parseQueryString(window.location.href);
 let accessToken = params?.token;
 let refreshToken = params?.refreshToken;
 const loggedInUserData = (data) => {
-  const roundedValue = data?.display_name
-    .split(" ")
-    .map((word) => word[0])
-    .join("");
-  const roundedData = document.getElementById("roundedName");
-  data?.display_name
-    ? (roundedData.style.backgroundColor = "#6d1874")
-    : (roundedData.style.backgroundColor = "transparen");
+  // const roundedValue = data?.display_name
+  //   .split(" ")
+  //   .map((word) => word[0])
+  //   .join("");
+  // const roundedData = document.getElementById("roundedName");
+  var imgElement = document.createElement("img");
+  data?.profile_picture_url
+    ? (imgElement.src = `${data?.profile_picture_url}`)
+    : "";
   roundedData.innerHTML = `${roundedValue}`;
   const chatNavbar = document.getElementById("chat-Navbar");
   chatBotResult?.background_colour

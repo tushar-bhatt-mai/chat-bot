@@ -128,6 +128,10 @@ button {
   width: 15px;
 }
 
+.suggested-messages{
+  position: sticky;
+}
+
 .chat-Navbar {
   background-color: black;
   color: white;
