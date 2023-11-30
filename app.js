@@ -8,6 +8,7 @@ let refreshToken = params?.refreshToken;
 const loggedInUserData = (data) => {
   const roundedValue = data?.display_name.split(" ").map((word) => word[0]).join("");
   const roundedData = document.getElementById("roundedName");
+  roundedData.style.backgroundColor = "transparen"
   roundedData.innerHTML = `${roundedValue}`;
 }
 function initialMessage() {
