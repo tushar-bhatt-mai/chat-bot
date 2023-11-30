@@ -10,10 +10,10 @@ const loggedInUserData = (data) => {
   //   .split(" ")
   //   .map((word) => word[0])
   //   .join("");
-  // const roundedData = document.getElementById("roundedName");
+  const roundedData = document.getElementById("roundedName");
   var imgElement = document.createElement("img");
   data?.profile_picture_url
-    ? (imgElement.src = `${data?.profile_picture_url}`)
+    ? (roundedData.imgElement.src = `${data?.profile_picture_url}`)
     : "";
   roundedData.innerHTML = `${roundedValue}`;
   const chatNavbar = document.getElementById("chat-Navbar");
