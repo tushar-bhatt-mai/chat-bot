@@ -15,7 +15,7 @@ function initialMessage() {
   const chatContainer = document.getElementById("chat-container");
   chatContainer.style.backgroundColor = chatBotResult?.background_colour;
   const displayChatWith = document.getElementById("display-chat");
-  displayChatWith.innerHTML = `${chatBotResult?.display_name} ? "Chat With" : ""`;
+  chatBotResult?.display_name ? displayChatWith.innerHTML = "Chat With" : displayChatWith.innerHTML = ""
   const displayName = document.getElementById("display-name");
   displayName.innerHTML = `${chatBotResult?.display_name ? chatBotResult?.display_name : ``}`;
   const initialValue = document.getElementById("initialValue");
