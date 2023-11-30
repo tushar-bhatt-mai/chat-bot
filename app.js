@@ -13,8 +13,8 @@ const loggedInUserData = (data) => {
 }
 function initialMessage() {
   loggedInUserData(chatBotResult)
-  const chatContainer = document.getElementById("chat-container");
-  chatContainer.style.backgroundColor = chatBotResult?.background_colour;
+  const chatNavbar = document.getElementById("chat-Navbar");
+  chatNavbar.style.backgroundColor = chatBotResult?.background_colour || "";
   const displayChatWith = document.getElementById("display-chat");
   chatBotResult?.display_name ? displayChatWith.innerHTML = "Chat With" : displayChatWith.innerHTML = ""
   const displayName = document.getElementById("display-name");
@@ -25,8 +25,6 @@ function initialMessage() {
       ? chatBotResult?.initial_message
       : `Initial Message`
   }</span>`;
-  const chatNavbar = document.getElementById("chat-Navbar");
-  chatNavbar.style.backgroundColor = chatBotResult?.background_colour || "";
   initialValue.style.fontSize = chatBotResult?.font_size || "12px";
   initialValue.style.fontFamily = chatBotResult?.font_style || "Arial, sans-serif";
   displaySuggestedMessages(chatBotResult?.suggested_messages || []);
