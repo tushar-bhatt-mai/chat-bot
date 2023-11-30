@@ -132,8 +132,12 @@ button {
   position: sticky;
 }
 
+.bgColor{
+  background-color: black !important;
+}
+
 .chat-Navbar {
-  /* background-color: black; */
+  background-color: black;
   color: white;
   border-radius: 0.5rem;
   border-top-right-radius: 0.5rem;

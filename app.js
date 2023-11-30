@@ -10,13 +10,13 @@ const loggedInUserData = (data) => {
   const roundedData = document.getElementById("roundedName");
   var imgElement = document.createElement('img');
     imgElement.src = `${data?.profile_picture_url}`;
-  data?.profile_picture_url ? roundedData.appendChild(imgElement) : roundedData.style.backgroundColor = "transparen";
+  data?.profile_picture_url !== "NA" ? roundedData.appendChild(imgElement) : data?.display_name ? (roundedData.style.backgroundColor = "#6d1874", roundedData.innerHTML = `${roundedValue}`) : roundedData.style.backgroundColor = "transparen";
   // roundedData.innerHTML = `${roundedValue}`;
 }
 function initialMessage() {
   loggedInUserData(chatBotResult)
   const chatNavbar = document.getElementById("chat-Navbar");
-  chatBotResult?.background_colour ? chatNavbar.style.backgroundColor = chatBotResult?.background_colour :  chatNavbar.style.backgroundColor = '#000000';
+  chatBotResult?.background_colour ? chatNavbar.style.backgroundColor = chatBotResult?.background_colour :  chatNavbar.classList.add("bgColor");
   const displayChatWith = document.getElementById("display-chat");
   chatBotResult?.display_name ? displayChatWith.innerHTML = "Chat With" : displayChatWith.innerHTML = ""
   const displayName = document.getElementById("display-name");
