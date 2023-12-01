@@ -8,6 +8,7 @@ let chatBotResult = {};
 const params = parseQueryString(window.location.href);
 let accessToken = params?.token;
 let refreshToken = params?.refreshToken;
+var loading = false;
 const loggedInUserData = (data) => {
   const roundedValue = data?.display_name
     .split(" ")
@@ -20,7 +21,7 @@ const loggedInUserData = (data) => {
   data?.profile_picture_url !== "NA"
     ? roundedData.appendChild(imgElement)
     : data?.display_name
-    ? ((roundedData.style.backgroundColor = "#6d1874"),
+    ? ((roundedData.style.backgroundColor = "#6D1874"),
       (roundedData.innerHTML = `${roundedValue}`))
     : (roundedData.style.backgroundColor = "transparen");
   // roundedData.innerHTML = `${roundedValue}`;
@@ -83,7 +84,7 @@ function parseQueryString(url) {
 function sendMessage() {
   const message = userInput.value.trim();
   if (!message) return;
-  displayMessage(message, "user");
+  displayMessage(message, "user", false);
   userInput.value = "";
   const myHeaders = new Headers();
   myHeaders.append("Authorization", `Bearer ${accessToken}`);
@@ -98,36 +99,30 @@ function sendMessage() {
     body: formdata,
     redirect: "follow",
   };
+  loading = true;
   fetch(baseUrl, requestOptions)
     .then((response) => response.text())
     .then((result) => {
       var parsedResult = JSON.parse(result || "{}");
       console.log("parse result");
       if (parsedResult.StatusCode == 401) {
-        // loader.classList.add("display")
-        // Refresh the access token
         fetchRefreshtoken();
-        displayMessage("Something went Wrong, Please try again", "bot");
-        // Retry the message sending with the new token
-        // sendMessage();
+        displayMessage("Something went Wrong, Please try again", "bot", true);
       } else {
-        // Process the result as usual
         const str = JSON.stringify(result);
-        displayMessage(JSON.parse(result)?.message, "bot");
-        // For removing suggested message from chat bot
-        const suggestedMessagesContainer = document.getElementById(
-          "suggested-messages"
-        );
-        suggestedMessagesContainer.style.display = "none";
+        displayMessage(JSON.parse(result)?.message, "bot", true);
+        loading = false;
       }
     })
     .catch((error) => {
-      // loader.style.display = 'none'
       console.error("error", error);
+    })
+    .finally(() => {
+      loading = false;
     });
 }
 function scrollToBottom() {
-  var chatWindow = document.getElementById('chat-box');
+  var chatWindow = document.getElementById("chat-box");
   if (chatWindow) {
     chatWindow.scrollTop = chatWindow.scrollHeight;
   }
@@ -158,22 +153,32 @@ function getChatbotDetails() {
     })
     .catch((error) => console.error("error", error));
 }
-function displayMessage(message, sender) {
+function displayMessage(message, sender, flag) {
   const messageElement = document.createElement("div");
   messageElement.classList.add(
     sender === "user" ? "user-messageDev" : "bot-messageDev"
   );
-  // if(sender == "user"){
-  //   loader.style.display = 'block'
-  // }else{
-  //   loader.style.display = 'none'
-  // }
   const textSpan = document.createElement("span");
   textSpan.classList.add(sender === "user" ? "user-message" : "bot-message");
-  textSpan.textContent = message;
+  if (loading && flag && sender === "bot") {
+    const loaderDiv = document.createElement("div");
+    loaderDiv.className = "loader";
+    for (let i = 0; i < 3; i++) {
+      const spanElement = document.createElement("span");
+      loaderDiv.appendChild(spanElement);
+    }
+    textSpan.appendChild(loaderDiv);
+    setTimeout(() => {
+      loaderDiv.style.display = "none";
+      textSpan.textContent = message;
+    }, 1000);
+  } else {
+    textSpan.textContent = message;
+  }
+  loading = false;
   messageElement.appendChild(textSpan);
   chatBox.appendChild(messageElement);
-  scrollToBottom()
+  scrollToBottom();
 }
 getChatbotDetails();
 const fetchRefreshtoken = async () => {

@@ -1,35 +1,30 @@
 :root {
-  --main-color: #eaf1f8;
-  --input-btn: #6d1874;
+  --main-color: #EAF1F8;
+  --input-btn: #6D1874;
 }
-
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
 }
-
 .chat-container {
   margin-bottom: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 10px;
 }
-
 .chat-box {
   height: 60vh;
   overflow-y: scroll;
   margin-bottom: 10px;
   padding-bottom: 10px;
 }
-
 .user-messageDev {
   width: 100%;
   display: flex;
   justify-content: flex-end;
   margin-top: 15px;
 }
-
 .user-message,
 .bot-message {
   /* background-color: var(--main-color); */
@@ -40,31 +35,25 @@ body {
   display: flex;
   flex-wrap: wrap;
 }
-
 .user-message {
   margin-right: 10px;
   background-color: lightblue;
 }
-
 .user-message span {
   text-align: end;
   background-color: var(--main-color);;
 }
-
 .bot-messageDev {
   margin: 25px 0;
 }
-
 .message-form {
   display: flex;
   justify-content: space-between;
 }
-
 #suggested-messages {
   position: relative;
   bottom: -80% !important;
 }
-
 input[type="text"] {
   width: 65%;
   padding: 10px;
@@ -73,25 +62,20 @@ input[type="text"] {
   outline: none;
   transition: border-color 0.3s ease;
 }
-
 .speakBtn {
   margin-bottom: -9px;
   cursor: pointer;
 }
-
 input[type="text"]:hover,
 input[type="text"]:focus {
   border-color: var(--input-btn);
 }
-
 input[type="text"]:focus {
   box-shadow: 0 0 5px rgba(128, 46, 204, 0.8);
 }
-
 #initialValue {
   margin-top: 15px !important;
 }
-
 .suggestion-button {
   display: flex;
   position: relative;
@@ -101,7 +85,7 @@ input[type="text"]:focus {
   margin-top: 5px;
   min-width: 250px;
   min-height: 28px;
-  background-color: #f9f8f9;
+  background-color: #F9F8F9;
   color: #282728;
   padding: 0px 10px;
   border-radius: 8px;
@@ -111,7 +95,6 @@ input[type="text"]:focus {
   text-align: center;
   padding: 10px;
 }
-
 button {
   background-color: black;
   border-radius: 50%;
@@ -121,21 +104,17 @@ button {
   cursor: pointer;
   position: relative;
 }
-
 .submitBtn {
   margin-top: 4px;
   left: -2px;
   width: 15px;
 }
-
 .suggested-messages{
   position: sticky;
 }
-
 .bgColor{
   background-color: black !important;
 }
-
 .chat-Navbar {
   background-color: black;
   color: white;
@@ -146,11 +125,9 @@ button {
   margin-top: 35px;
   height: 77px;
 }
-
 .chat-nav-container {
   display: flex;
 }
-
 .roundedName {
   margin-top: 15px;
   margin-left: 15px;
@@ -158,18 +135,15 @@ button {
   justify-content: center;
   align-items: center;
 }
-
 .imgStyle{
   width: 40px;
   height: 40px;
   border-radius: 50%;
 }
-
 .chat-Navbar-name {
   margin-top: 18px;
   margin-left: 5px;
 }
-
 .chat-Navbar-name b {
   font-family: Inter;
   font-size: 16px;
@@ -178,7 +152,6 @@ button {
   letter-spacing: 0px;
   text-align: center;
 }
-
 .chat-Navbar-name small {
   font-family: Inter;
   font-size: 10px;
@@ -187,7 +160,6 @@ button {
   letter-spacing: 0px;
   text-align: center;
 }
-
 .chat-Navbar-name strong {
   font-family: Inter;
   font-size: 8px;
@@ -196,10 +168,9 @@ button {
   letter-spacing: 0px;
   text-align: center;
 }
-
 /* .loader {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #3498db;
+  border: 4px solid #F3F3F3;
+  border-top: 4px solid #3498DB;
   border-radius: 50%;
   width: 50px;
   height: 50px;
@@ -207,12 +178,10 @@ button {
   animation: spin 2s linear infinite;
   display: none;
 }
-
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 } */
-
 .loader {
   text-align: center;
 }
