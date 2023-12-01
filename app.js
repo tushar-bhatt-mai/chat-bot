@@ -1,7 +1,7 @@
 const chatBox = document.getElementById("chat-box");
-const loader = document.createElement("div");
-chatBox.appendChild(loader);
-loader.classList.add("loader")
+// const loader = document.createElement("div");
+// chatBox.appendChild(loader);
+// loader.classList.add("loader")
 const userInput = document.getElementById("user-input");
 const baseUrl = "https://dev-maibot-predictionapi.p2eppl.com/";
 let chatBotResult = {};
@@ -122,9 +122,15 @@ function sendMessage() {
       }
     })
     .catch((error) => {
-      loader.style.display = 'none'
+      // loader.style.display = 'none'
       console.error("error", error);
     });
+}
+function scrollToBottom() {
+  var chatWindow = document.getElementById('chat-box');
+  if (chatWindow) {
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  }
 }
 function getChatbotDetails() {
   const myHeaders = new Headers();
@@ -157,16 +163,17 @@ function displayMessage(message, sender) {
   messageElement.classList.add(
     sender === "user" ? "user-messageDev" : "bot-messageDev"
   );
-  if(sender == "user"){
-    loader.style.display = 'block'
-  }else{
-    loader.style.display = 'none'
-  }
+  // if(sender == "user"){
+  //   loader.style.display = 'block'
+  // }else{
+  //   loader.style.display = 'none'
+  // }
   const textSpan = document.createElement("span");
   textSpan.classList.add(sender === "user" ? "user-message" : "bot-message");
   textSpan.textContent = message;
   messageElement.appendChild(textSpan);
   chatBox.appendChild(messageElement);
+  scrollToBottom()
 }
 getChatbotDetails();
 const fetchRefreshtoken = async () => {
