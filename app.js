@@ -36,20 +36,21 @@ function initialMessage() {
   chatBotResult?.display_name
     ? (displayChatWith.innerHTML = "Chat With")
     : (displayChatWith.innerHTML = "");
+    displayChatWith.style.fontSize = `${chatBotResult?.font_size}px` || "12px"
   const displayName = document.getElementById("display-name");
   displayName.innerHTML = `${
     chatBotResult?.display_name ? chatBotResult?.display_name : ``
   }`;
+  displayName.style.fontSize = `${chatBotResult?.font_size}px` || "12px"
+  userInput.style.fontSize = `${chatBotResult?.font_size}px` || "12px"
   const initialValue = document.getElementById("initialValue");
   initialValue.innerHTML = `<span class='bot-message'>${
     chatBotResult?.initial_message
       ? chatBotResult?.initial_message
       : `Initial Message`
   }</span>`;
-  initialValue.style.fontSize = chatBotResult?.font_size || "12px";
-  initialValue.style.fontFamily =
-    chatBotResult?.font_style || "Arial, sans-serif";
-  displaySuggestedMessages(chatBotResult?.suggested_messages || []);
+  initialValue.style.fontSize = `${chatBotResult?.font_size}px` || "12px";
+  document.getElementById('chatbot-style').style.fontFamily = chatBotResult?.font_style || "Arial, sans-serif";
 }
 function displaySuggestedMessages(suggestedMessages) {
   const suggestedMessagesContainer = document.getElementById(
@@ -159,7 +160,10 @@ function displayMessage(message, sender, flag) {
     sender === "user" ? "user-messageDev" : "bot-messageDev"
   );
   const textSpan = document.createElement("span");
+ 
   textSpan.classList.add(sender === "user" ? "user-message" : "bot-message");
+  textSpan.style.fontSize = `${chatBotResult?.font_size}px`
+
   if (loading && flag && sender === "bot") {
     const loaderDiv = document.createElement("div");
     loaderDiv.className = "loader";
