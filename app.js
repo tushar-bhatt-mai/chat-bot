@@ -49,10 +49,12 @@ function initialMessage() {
       ? chatBotResult?.initial_message
       : `Initial Message`
   }</span>`;
+  displaySuggestedMessages(chatBotResult?.suggested_messages, chatBotResult?.font_size || []);
+
   initialValue.style.fontSize = `${chatBotResult?.font_size}px` || "12px";
   document.getElementById('chatbot-style').style.fontFamily = chatBotResult?.font_style || "Arial, sans-serif";
 }
-function displaySuggestedMessages(suggestedMessages) {
+function displaySuggestedMessages(suggestedMessages, fontSize) {
   const suggestedMessagesContainer = document.getElementById(
     "suggested-messages"
   );
@@ -61,6 +63,7 @@ function displaySuggestedMessages(suggestedMessages) {
     const suggestionButton = document.createElement("button");
     suggestionButton.textContent = message;
     suggestionButton.classList.add("suggestion-button");
+    suggestionButton.style.fontSize = `${fontSize}px` || "12px";
     suggestionButton.onclick = function () {
       fillInputAndSendMessage(message);
     };
