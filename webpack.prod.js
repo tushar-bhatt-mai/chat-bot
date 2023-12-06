@@ -21,19 +21,19 @@ module.exports = merge(common, {
           keep_fnames: true, // Preserve function names
         },
       }),
-      new HtmlWebpackPlugin({
-        template: "./src/template.html",
-        minify: {
-          removeAttributeQuotes: true,
-          collapseWhitespace: true,
-          removeComments: true,
-        },
-      }),
     ],
   },
   plugins: [
     new MiniCssExtractPlugin({ filename: "[name].[contentHash].css" }),
     new CleanWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      template: "./src/template.html",
+      minify: {
+        removeAttributeQuotes: true,
+        collapseWhitespace: true,
+        removeComments: true,
+      },
+    }),
   ],
   module: {
     rules: [
@@ -41,7 +41,7 @@ module.exports = merge(common, {
         test: /\.css$/,
         use: [
           MiniCssExtractPlugin.loader,
-          "css-loader", 
+          "css-loader",
         ],
       },
       {
