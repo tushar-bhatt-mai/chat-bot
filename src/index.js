@@ -9,9 +9,12 @@ const baseUrlCostomization =
 
 // Global variables
 let chatBotResult = {};
-const params = parseQueryString(window.location.href);
+const params = parseQueryString(window.location.href) ||{
+  params:''
+};
 let accessToken = getLocalStorageItem("accessTokenIframe") || params?.token;
-let refreshToken = params?.refreshToken;
+
+let refreshToken = params.refreshToken;
 var loading = false;
 
 // Function to display logged-in user data
@@ -19,7 +22,7 @@ const loggedInUserData = (data) => {
   const roundedValue = getRoundedValue(data);
   const roundedData = document.getElementById("roundedName");
 
-  if (data?.profile_picture_url !== "NA") {
+  if (data && data?.profile_picture_url !== "NA") {
     displayProfilePicture(roundedData, data?.profile_picture_url);
   } else if (data?.display_name) {
     displayRoundedName(roundedData, roundedValue);
@@ -27,6 +30,15 @@ const loggedInUserData = (data) => {
     roundedData.style.backgroundColor = "transparent";
   }
 };
+// Helper function to invoked whenever onSubmit is called
+
+document.addEventListener('DOMContentLoaded', function () {
+  const button = document.getElementById('submitBtn');
+  button.addEventListener('click', function (event) {
+      event.preventDefault(); 
+      sendMessage();
+  });
+});
 
 // Helper function to get rounded value from display name
 function getRoundedValue(data) {
@@ -209,7 +221,7 @@ function createFormDataForSendMsg(message) {
 }
 
 // Function to send user message to the chatbot
-function sendMessage(event) {
+export function sendMessage(event) {
   if(event){
     event.preventDefault();
   }
@@ -389,11 +401,11 @@ function fetchMessage(url, requestOptions) {
 
 // Function to fetch chatbot details from the API
 function fetchChatbotDetails(requestOptions) {
-  fetch(baseUrlCostomization, requestOptions)
+      fetch(baseUrlCostomization, requestOptions)
     .then((response) => response.text())
     .then(handleChatbotDetailsResult)
     .catch((error) => console.error("error", error));
-}
-
+  }
+ 
 // Fetch chatbot details on page load
 getChatbotDetails();
