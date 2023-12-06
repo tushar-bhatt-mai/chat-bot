@@ -23,7 +23,7 @@
       <div class="chat-box" id="chat-box">
         <div class="suggested-messages" id="suggested-messages"></div>
       </div>
-      <form id="message-form" onsubmit="sendMessage(); return false;">
+      <form id="message-form" onsubmit="sendMessage(event);">
         <input type="text" id="user-input" placeholder="Type your message..." />
         <img class="speakBtn" src="./images/speackIcon.png" />
         <button type="submit">

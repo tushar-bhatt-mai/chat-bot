@@ -209,7 +209,10 @@ function createFormDataForSendMsg(message) {
 }
 
 // Function to send user message to the chatbot
-function sendMessage() {
+function sendMessage(event) {
+  if(event){
+    event.preventDefault();
+  }
   const message = getUserInputMessage();
   if (!message) return;
   displayUserMessage(message);
