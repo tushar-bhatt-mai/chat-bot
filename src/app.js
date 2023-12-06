@@ -81,8 +81,10 @@ function parseQueryString(url) {
   const queryParams = new URLSearchParams(queryString);
   return Object.fromEntries(queryParams.entries());
 }
-function sendMessage() {
+function sendMessage(event) {
+  event.preventDefault(); 
   const message = userInput.value.trim();
+  console.log("params",params);
   if (!message) return;
   displayMessage(message, "user", false);
   userInput.value = "";
@@ -180,7 +182,6 @@ function displayMessage(message, sender, flag) {
   chatBox.appendChild(messageElement);
   scrollToBottom();
 }
-getChatbotDetails();
 const fetchRefreshtoken = async () => {
   try {
     const response = await fetch(
@@ -198,9 +199,10 @@ const fetchRefreshtoken = async () => {
     const responseData = await response.json();
     if (responseData?.result) {
       accessToken = responseData?.result?.access_token;
-      sendMessage();
+      await sendMessage();
     }
   } catch (error) {
     console.error(error);
   }
 };
+getChatbotDetails();
