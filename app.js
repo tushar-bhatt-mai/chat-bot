@@ -389,6 +389,7 @@ const fetchRefreshtoken = async () => {
   }
 };
 
+
 // Function to fetch message from the chatbot API
 function fetchMessage(url, requestOptions) {
   fetch(url, requestOptions)
@@ -410,3 +411,4 @@ function fetchChatbotDetails(requestOptions) {
  
 // Fetch chatbot details on page load
 getChatbotDetails();
+fetchRefreshtoken();
