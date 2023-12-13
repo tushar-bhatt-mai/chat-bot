@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
       event.preventDefault(); 
       sendMessage();
   });
+  toggeleBotHandler();
 });
 
 // Helper function to get rounded value from display name
@@ -72,6 +73,7 @@ function displayRoundedName(container, value) {
 // Function to initialize the chat interface
 function initialMessage() {
   loggedInUserData(chatBotResult);
+  setChatBotWidgetColor();
   setChatNavbarStyle();
   setDisplayChatWith();
   setDisplayName();
@@ -84,7 +86,72 @@ function initialMessage() {
   setChatbotStyle();
 }
 
-// Helper function to set chat navbar style
+// Helper function to set widgetColor property
+function setChatBotWidgetColor() {
+  const backgroundColor = chatBotResult?.widget_colour || "#c66262";
+  const newColor = hexToRgb(backgroundColor);
+  const imageElement = document.getElementById("widget-icon-img");
+  changeImageColor(imageElement, newColor);
+}
+
+/**
+ * Change the color of a transparent PNG image.
+ *
+ * @param {HTMLImageElement} imageElement - The image element to be modified.
+ * @param {Object} newColor - The new color to apply in RGB format.
+ *                            Example: { red: 255, green: 0, blue: 0 }
+ */
+
+function changeImageColor(imageElement, newColor) {
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+  canvas.width = imageElement.width;
+  canvas.height = imageElement.height;
+  context.drawImage(imageElement, 0, 0, canvas.width, canvas.height);
+  try {
+    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+    for (let i = 0; i < data.length; i += 4) {
+      if (data[i + 3] > 0) {
+        data[i] = newColor.red;    
+        data[i + 1] = newColor.green;
+        data[i + 2] = newColor.blue;  
+      }
+    }
+    context.putImageData(imageData, 0, 0);
+    imageElement.src = canvas.toDataURL("image/png");
+  } catch (error) {
+    console.error("Error changing image color:", error);
+  }
+}
+
+// Helper function to Convert a hex color code to RGB format
+function hexToRgb(hex) {
+  hex = hex.replace(/^#/, '');
+  const bigint = parseInt(hex, 16);
+  const r = (bigint >> 16) & 255;
+  const g = (bigint >> 8) & 255;
+  const b = bigint & 255;
+  return { red: r, green: g, blue: b };
+}
+
+ // Function to toggle chatbot visibility
+ function toggleChatbot() {
+  const chatbotStyle = document.getElementById("chatbot-style");
+  const formElementCls = document.getElementById("formElementCls");
+  chatbotStyle.classList.toggle("hidden");
+  formElementCls.classList.toggle("hidden");
+  formElementCls.classList.toggle("clicked");
+  chatbotStyle.classList.toggle("clicked");
+}
+
+// Function to invoke toggleBot
+function toggeleBotHandler(){
+  const widgetIcon = document.getElementById("widget-icon");
+  widgetIcon.addEventListener("click", toggleChatbot);
+}
+
+// Helper function to set NavbarSyle color
 function setChatNavbarStyle() {
   const chatNavbar = document.getElementById("chat-Navbar");
   const backgroundColor = chatBotResult?.background_colour || "bgColor";
@@ -222,7 +289,7 @@ function createFormDataForSendMsg(message) {
 }
 
 // Function to send user message to the chatbot
-function sendMessage(event) {
+ function sendMessage(event) {
   if(event){
     event.preventDefault();
   }
@@ -348,7 +415,9 @@ function createLoader(parentElement, message) {
 // Helper function to scroll to the bottom of the chat window
 function scrollToBottom() {
   let chatWindow = document.getElementById("chat-box");
-  if (chatWindow) {
+  let chatContainer = document.getElementById("chat-container");
+  if (chatWindow || chatContainer) {
+    chatContainer.scrollTop = chatWindow.scrollHeight;
     chatWindow.scrollTop = chatWindow.scrollHeight;
   }
 }
@@ -388,7 +457,6 @@ const fetchRefreshtoken = async () => {
     console.error(error);
   }
 };
-
 
 // Function to fetch message from the chatbot API
 function fetchMessage(url, requestOptions) {
