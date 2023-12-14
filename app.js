@@ -217,7 +217,7 @@ function clearSuggestedMessages(container) {
 
 // Helper function to create suggestion button
 function createSuggestionButton(message, fontSize) {
-  const suggestionButton = document.createElement("button");
+  const suggestionButton = document.createElement("span");
   suggestionButton.textContent = message;
   suggestionButton.classList.add("suggestion-button");
   suggestionButton.style.fontSize = `${fontSize}px` || "12px";
