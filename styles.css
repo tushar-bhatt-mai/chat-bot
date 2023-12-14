@@ -68,6 +68,7 @@ body {
 #suggested-messages {
   position: fixed;
   bottom: 30%;
+  max-width: 90%;
 }
 input[type="text"] {
   width: 65%;
@@ -92,24 +93,18 @@ input[type="text"]:focus {
   margin-top: 15px !important;
 }
 .suggestion-button {
-  display: flex;
-  position: relative;
-  bottom: 0;
-  flex-direction: column;
-  align-items: flex-start;
   margin-top: 5px;
-  min-width: 250px;
-  min-height: 28px;
   background-color: #f9f8f9;
   color: #282728;
-  padding: 0px 10px;
+  min-height: 40px; 
   border-radius: 8px;
   font-family: Inter;
-  font-weight: 400;
   border: none;
-  text-align: center;
-  padding: 10px;
+  text-align: start;
+  width: 100%;
 }
+
+
 button {
   background-color: black;
   border-radius: 50%;
