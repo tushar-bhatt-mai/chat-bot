@@ -13,7 +13,7 @@ let chatBotResult = {};
 const params = parseQueryString(window.location.href) ||{
   params:''
 };
-let accessToken = getLocalStorageItem("accessTokenIframe") || params?.token;
+let accessToken = params?.token;
 
 let refreshToken = params.refreshToken;
 var loading = false;
@@ -422,16 +422,6 @@ function scrollToBottom() {
   }
 }
 
-// Helper function to get an item from local storage
-function getLocalStorageItem(key) {
-  return localStorage.getItem(key);
-}
-
-// Helper function to set an item in local storage
-function setLocalStorageItem(key, value) {
-  return localStorage.setItem(key, value);
-}
-
 // Function to refresh the access token using the refresh token
 const fetchRefreshtoken = async () => {
   try {
@@ -450,7 +440,6 @@ const fetchRefreshtoken = async () => {
     const responseData = await response.json();
     if (responseData?.result) {
       accessToken = responseData?.result?.access_token;
-      setLocalStorageItem("accessTokenIframe", responseData?.result?.access_token);
       sendMessage();
     }
   } catch (error) {
