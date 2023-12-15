@@ -18,6 +18,9 @@ let accessToken = params?.token;
 let refreshToken = params.refreshToken;
 var loading = false;
 
+let width = params?.width || '500'
+let height = params?.height || '800'
+
 // Function to display logged-in user data
 const loggedInUserData = (data) => {
   const roundedValue = getRoundedValue(data);
@@ -84,6 +87,21 @@ function initialMessage() {
     chatBotResult?.font_size || []
   );
   setChatbotStyle();
+  appendCssInBody();
+}
+
+// Function to set disply height  or width
+function appendCssInBody() {
+  const styleElement = document.createElement('style');
+  const cssRules = `
+    #myIframe {
+      min-height: ${height +'px'|| '900px'} ;
+      width: ${width +'px' || '500px'};
+      border: none;
+    }
+  `;
+  styleElement.textContent = cssRules;
+  document.body.appendChild(styleElement);
 }
 
 // Helper function to set widgetColor property
