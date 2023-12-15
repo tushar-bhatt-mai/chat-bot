@@ -87,22 +87,24 @@ function initialMessage() {
     chatBotResult?.font_size || []
   );
   setChatbotStyle();
-  appendCssInBody();
+  // appendCssInBody();
 }
 
 // Function to set disply height  or width
-function appendCssInBody() {
-  const styleElement = document.createElement('style');
-  const cssRules = `
-    #myIframe {
-      min-height: ${height +'px'|| '900px'} ;
-      width: ${width +'px' || '500px'};
-      border: none;
-    }
-  `;
-  styleElement.textContent = cssRules;
-  document.body.appendChild(styleElement);
-}
+// function appendCssInBody() {
+//   const styleElement = document.createElement('style');
+//   const cssRules = `
+//   #myIframe {
+//       min-height: ${height +'px'|| '900px'} ;
+//       width: ${width +'px' || '500px'};
+//       border: none;
+//     }
+//   `;
+//   styleElement.textContent = cssRules;
+//   console.log("Append css", styleElement)
+//   document.body.appendChild(styleElement);
+//   console.log("document boyd",   document  )
+// }
 
 // Helper function to set widgetColor property
 function setChatBotWidgetColor() {
