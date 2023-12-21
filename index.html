@@ -1,58 +1,66 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>Simple Chatbot</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
 
-<head>
-  <title>Simple Chatbot</title>
-  <link rel="stylesheet" href="styles.css" />
-</head>
+  <body>
+    <div id="chatbot-style">
+      <div class="chat-Navbar" id="chat-Navbar">
+        <div class="chat-nav-container">
+          <div class="roundedName" id="roundedName"></div>
+          <div class="chat-Navbar-name">
+            <div>
+              <small id="display-chat"></small>
+            </div>
 
-<body>
-  <div id="chatbot-style">
-    <div class="chat-Navbar" id="chat-Navbar">
-      <div class="chat-nav-container">
-        <div class="roundedName" id="roundedName"></div>
-        <div class="chat-Navbar-name">
-          <small id="display-chat"></small>
-          <br />
-          <bold id="display-name"></bold>
+            <bold id="display-name"></bold>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-container" id="chat-container">
+        <div id="initialValue">
+        </div>
+        <div class="chat-box" id="chat-box">
+        </div>
+
+      </div>
+      <div class="suggested-messages" id="suggested-messages"></div>
+
+      <div class="formElementCls" id="formElementCls">
+        <!-- <hr class="formElHr"/> -->
+        <form id="message-form">
+          <input
+            type="text"
+            id="user-input"
+            placeholder="Type your message..."
+          />
+          <!-- <div class="chatIcons">
+            <img class="speakBtn" src="./images/speackIcon.png" />
+          </div>
+          <div class="chatIcons">
+            <img class="speakBtn" src="./images/speackIcon.png" />
+          </div> -->
+          <div class="chatIcons">
+            <button type="submit" id="submitBtn">
+              <img class="submitBtn" src="./images/sendBtn.png" />
+            </button>
+          </div>
+        </form>
+        <div class="powerdByText">
+          <span class="powerdSpan"> Powered By </span>
+          <strong>MaiBot</strong>
         </div>
       </div>
     </div>
 
-    <div class="chat-container" id="chat-container">
-      <div id="initialValue"></div>
-      <div class="chat-box" id="chat-box">
-        <div class="suggested-messages" id="suggested-messages"></div>
+    <div id="widget-icon">
+      <div class="iconsImg">
+        <img id="widget-icon-img" src="./images/mybot.png" alt="Chatbot Icon" />
       </div>
-
     </div>
-
-  </div>
-  <div class="formElementCls" id="formElementCls">
-    <!-- <hr class="formElHr"/> -->
-    <form id="message-form">
-      <input type="text" id="user-input" placeholder="Type your message..." />
-      <img class="speakBtn" src="./images/speackIcon.png" />
-      <button type="submit" id="submitBtn">
-        <img class="submitBtn" src="./images/sendBtn.png" />
-      </button>
-      <div class="powerdByText">
-        <span class="powerdSpan">
-          Powered By
-        </span>
-        <strong>MaiBot</strong>
-      </div>
-    </form>
-  </div>
-
-  </div>
-  <div id="widget-icon">
-    <div class="iconsImg">
-      <img id="widget-icon-img" src="./images/mybot.png" alt="Chatbot Icon" />
-    </div>
-  </div>
-  <script src="./app.js"></script>
-
-</body>
-
+    <script src="./app.js"></script>
+  </body>
 </html>

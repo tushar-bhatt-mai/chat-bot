@@ -200,11 +200,16 @@ function setUserInputStyle() {
 // Helper function to set initial value
 function setInitialValue() {
   const initialValue = document.getElementById("initialValue");
-  initialValue.innerHTML = `<span class='bot-message'>${
-    chatBotResult?.initial_message || "Initial Message"
-  }</span>`;
+  initialValue.innerHTML = `
+    <span class='bot-message'>
+      ${chatBotResult?.initial_message || "Initial Message"}
+    </span>
+    <div class="arrow-left"></div>
+  `;
+
   initialValue.style.fontSize = `${chatBotResult?.font_size}px` || "12px";
 }
+
 
 // Helper function to set chatbot style
 function setChatbotStyle() {
@@ -396,6 +401,15 @@ function createMessageElement(sender) {
   messageElement.classList.add(
     sender === "user" ? "user-messageDev" : "bot-messageDev"
   );
+  const arrowDiv = document.createElement("div");
+  if(sender === "user"){
+    arrowDiv.classList.add("arrow-right");
+    messageElement.appendChild(arrowDiv);
+  }else{
+    arrowDiv.classList.add("arrow-left");
+    messageElement.appendChild(arrowDiv);
+  }
+
   return messageElement;
 }
 
