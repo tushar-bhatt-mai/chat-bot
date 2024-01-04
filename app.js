@@ -38,12 +38,17 @@ const loggedInUserData = (data) => {
 
 document.addEventListener('DOMContentLoaded', function () {
   const button = document.getElementById('submitBtn');
+  if(button)
   button.addEventListener('click', function (event) {
       event.preventDefault(); 
       sendMessage();
   });
   toggeleBotHandler();
 });
+
+function sendMessage(){
+  sendMessage();
+}
 
 // Helper function to get rounded value from display name
 function getRoundedValue(data) {
@@ -52,6 +57,7 @@ function getRoundedValue(data) {
     .map((word) => word[0])
     .join("");
 }
+
 
 // Helper function to display profile picture
 function displayProfilePicture(container, imageUrl) {
@@ -111,7 +117,9 @@ function setChatBotWidgetColor() {
   const backgroundColor = chatBotResult?.widget_colour || "#c66262";
   const newColor = hexToRgb(backgroundColor);
   const imageElement = document.getElementById("widget-icon-img");
+  if(imageElement){
   changeImageColor(imageElement, newColor);
+  }
 }
 
 /**
@@ -129,7 +137,7 @@ function changeImageColor(imageElement, newColor) {
   canvas.height = imageElement.height;
   context.drawImage(imageElement, 0, 0, canvas.width, canvas.height);
   try {
-    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+    const imageData = context?.getImageData(0, 0, canvas.width, canvas.height);
     const data = imageData.data;
     for (let i = 0; i < data.length; i += 4) {
       if (data[i + 3] > 0) {
@@ -168,7 +176,10 @@ function hexToRgb(hex) {
 // Function to invoke toggleBot
 function toggeleBotHandler(){
   const widgetIcon = document.getElementById("widget-icon");
-  widgetIcon.addEventListener("click", toggleChatbot);
+  if(widgetIcon){
+    widgetIcon.addEventListener("click", toggleChatbot);
+
+  }
 }
 
 // Helper function to set NavbarSyle color
@@ -194,7 +205,9 @@ function setDisplayName() {
 
 // Helper function to set user input style
 function setUserInputStyle() {
-  userInput.style.fontSize = `${chatBotResult?.font_size}px` || "12px";
+  if(userInput){
+    userInput.style.fontSize = `${chatBotResult?.font_size}px` || "12px";
+  }
 }
 
 // Helper function to set initial value
@@ -214,8 +227,12 @@ function setInitialValue() {
 // Helper function to set chatbot style
 function setChatbotStyle() {
   const chatbotStyle = document.getElementById("chatbot-style");
-  chatbotStyle.style.fontFamily =
+  console.log("chatbotStyle", chatbotStyle)
+  if(chatbotStyle){
+    chatbotStyle.style.fontFamily =
     chatBotResult?.font_style || "Arial, sans-serif";
+  }
+ 
 }
 
 // Function to display suggested messages
@@ -283,7 +300,8 @@ function parseQueryString(url) {
 
 // Helper function to get user input message
 function getUserInputMessage() {
-  return userInput.value.trim();
+  console.log('userInput', userInput)
+  return userInput ? userInput.value.trim() : '';
 }
 
 // Helper function to display user message
@@ -319,6 +337,7 @@ function createFormDataForSendMsg(message) {
     event.preventDefault();
   }
   const message = getUserInputMessage();
+
   if (!message) return;
   displayUserMessage(message);
   clearUserInput();
