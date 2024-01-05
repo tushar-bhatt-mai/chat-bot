@@ -15,13 +15,16 @@ const params = parseQueryString(window.location.href) ||{
 };
 
 var loading = false;
-let accessToken = params?.token || window.WebChat.token;
-let width = params?.width || '500'
-let height = params?.height || '800'
-let username = params?.username || window.WebChat.username;
-let modelname = params?.modelname || window.WebChat.modelname
-let chatbotname = params?.chatbotname || window.WebChat.chatbotname
-let refreshToken = params?.refreshToken || window.WebChat.refreshToken;
+
+const {
+  token: accessToken = window.WebChat.token,
+  width = '500',
+  height = '800',
+  username = window.WebChat.username,
+  modelname = window.WebChat.modelname,
+  chatbotname = window.WebChat.chatbotname,
+  refreshToken = window.WebChat.refreshToken
+} = params || {};
 
 
 // Function to display logged-in user data
