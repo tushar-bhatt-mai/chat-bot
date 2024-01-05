@@ -13,13 +13,16 @@ let chatBotResult = {};
 const params = parseQueryString(window.location.href) ||{
   params:''
 };
-let accessToken = params?.token;
 
-let refreshToken = params.refreshToken;
 var loading = false;
-
+let accessToken = params?.token || window.WebChat.token;
 let width = params?.width || '500'
 let height = params?.height || '800'
+let username = params?.username || window.WebChat.username;
+let modelname = params?.modelname || window.WebChat.modelname
+let chatbotname = params?.chatbotname || window.WebChat.chatbotname
+let refreshToken = params?.refreshToken || window.WebChat.refreshToken;
+
 
 // Function to display logged-in user data
 const loggedInUserData = (data) => {
@@ -178,7 +181,6 @@ function toggeleBotHandler(){
   const widgetIcon = document.getElementById("widget-icon");
   if(widgetIcon){
     widgetIcon.addEventListener("click", toggleChatbot);
-
   }
 }
 
@@ -324,8 +326,8 @@ function createHeaders() {
 // Helper function to create form data for sending messages
 function createFormDataForSendMsg(message) {
   const formdata = new FormData();
-  formdata.append("username", params?.username);
-  formdata.append("modelname", params?.modelname);
+  formdata.append("username", username);
+  formdata.append("modelname", modelname);
   formdata.append("question", message);
   formdata.append("source_language_code", "en");
   return formdata;
@@ -373,8 +375,8 @@ function handleError(error) {
 // Helper function to create form data for API requests
 function createFormData(params) {
   const formdata = new FormData();
-  formdata.append("username", params.username);
-  formdata.append("chatbot_name", params.chatbotname);
+  formdata.append("username", username);
+  formdata.append("chatbot_name", chatbotname);
   return formdata;
 }
 
