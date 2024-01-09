@@ -3,10 +3,7 @@
 const chatBox = document.getElementById("chat-box");
 const userInput = document.getElementById("user-input");
 
-// API endpoints
-const baseUrlPrediction = "https://dev-maibot-predictionapi.p2eppl.com/";
-const baseUrlCostomization =
-  "https://dev-maibot-chatbot-detailapi.p2eppl.com/get_chatbot_customization";
+
 
 // Global variables
 let chatBotResult = {};
@@ -23,8 +20,21 @@ const {
   username = window.WebChat.username,
   modelname = window.WebChat.modelname,
   chatbotname = window.WebChat.chatbotname,
-  refreshToken = window.WebChat.refreshToken
+  refreshToken = window.WebChat.refreshToken,
+  environment = window.WebChat.environment || 'dev'
 } = params || {};
+
+
+function removeStr(str){
+  return str.replace(/^\s+/, '')
+}
+
+// API endpoints
+
+const baseUrlPrediction = `https://${removeStr(environment)}-maibot-predictionapi.p2eppl.com/`;
+
+const baseUrlCostomization =
+  `https://${removeStr(environment)}-maibot-chatbot-detailapi.p2eppl.com/get_chatbot_customization`;
 
 
 // Function to display logged-in user data
@@ -482,27 +492,27 @@ function scrollToBottom() {
 
 // Function to refresh the access token using the refresh token
 const fetchRefreshtoken = async () => {
-  try {
-    const response = await fetch(
-      `https://dev-auth2api.p2eppl.com/auth/refresh`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          refresh_token: refreshToken,
-        }),
-      }
-    );
-    const responseData = await response.json();
-    if (responseData?.result) {
-      accessToken = responseData?.result?.access_token;
-      sendMessage();
-    }
-  } catch (error) {
-    console.error(error);
-  }
+  // try {
+  //   const response = await fetch(
+  //     `https://dev-auth2api.p2eppl.com/auth/refresh`,
+  //     {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         refresh_token: refreshToken,
+  //       }),
+  //     }
+  //   );
+  //   const responseData = await response.json();
+  //   if (responseData?.result) {
+  //     accessToken = responseData?.result?.access_token;
+  //     sendMessage();
+  //   }
+  // } catch (error) {
+  //   console.error(error);
+  // }
 };
 
 // Function to fetch message from the chatbot API
