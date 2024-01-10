@@ -1,9 +1,8 @@
 // import './styles.css';
+
 // DOM elements
 const chatBox = document.getElementById("chat-box");
 const userInput = document.getElementById("user-input");
-
-
 
 // Global variables
 let chatBotResult = {};
@@ -64,6 +63,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function sendMessage(){
   sendMessage();
+}
+
+function changeBgColor(color){
+  const widgetElement = document.getElementById('mySvgElement');
+  if(widgetElement){
+    widgetElement.style.fill = color || 'black';
+  }
+
 }
 
 // Helper function to get rounded value from display name
@@ -134,7 +141,7 @@ function setChatBotWidgetColor() {
   const newColor = hexToRgb(backgroundColor);
   const imageElement = document.getElementById("widget-icon-img");
   if(imageElement){
-  changeImageColor(imageElement, newColor);
+  // changeImageColor(imageElement, newColor);
   }
 }
 
@@ -242,7 +249,6 @@ function setInitialValue() {
 // Helper function to set chatbot style
 function setChatbotStyle() {
   const chatbotStyle = document.getElementById("chatbot-style");
-  console.log("chatbotStyle", chatbotStyle)
   if(chatbotStyle){
     chatbotStyle.style.fontFamily =
     chatBotResult?.font_style || "Arial, sans-serif";
@@ -415,6 +421,7 @@ function handleChatbotDetailsResult(result) {
   const parsedResult = JSON.parse(result);
   if (parsedResult.statusCode === 200) {
     chatBotResult = parsedResult.message;
+    changeBgColor(parsedResult.message.widget_colour)
     initialMessage();
   }
 }
