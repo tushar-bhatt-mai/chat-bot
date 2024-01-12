@@ -13,14 +13,17 @@ const params = parseQueryString(window.location.href) ||{
 var loading = false;
 
 const {
-  token: accessToken = window.WebChat.token,
+  // token: accessToken = window.WebChat.token,
   width = '500',
   height = '800',
   username = window.WebChat.username,
   modelname = window.WebChat.modelname,
   chatbotname = window.WebChat.chatbotname,
-  refreshToken = window.WebChat.refreshToken,
-  environment = window.WebChat.environment || 'dev'
+  // refreshToken = window.WebChat.refreshToken,
+  environment = window.WebChat.environment || 'dev',
+  apiKey = window.WebChat.apiKey,
+  chatBotId = window.WebChat.chatBotId,
+  sourceLanguageCode = "en"
 } = params || {};
 
 
@@ -30,7 +33,7 @@ function removeStr(str){
 
 // API endpoints
 
-const baseUrlPrediction = `https://${removeStr(environment)}-maibot-predictionapi.p2eppl.com/`;
+const baseUrlPrediction = `https://${removeStr(environment)}-maibot-predictionapi.p2eppl.com/prediction_with_API_KEY`;
 
 const baseUrlCostomization =
   `https://${removeStr(environment)}-maibot-chatbot-detailapi.p2eppl.com/get_chatbot_customization`;
@@ -74,6 +77,7 @@ function changeBgColor(color){
 }
 
 // Helper function to get rounded value from display name
+
 function getRoundedValue(data) {
   return data?.display_name
     .split(" ")
@@ -245,7 +249,6 @@ function setInitialValue() {
   initialValue.style.fontSize = `${chatBotResult?.font_size}px` || "12px";
 }
 
-
 // Helper function to set chatbot style
 function setChatbotStyle() {
   const chatbotStyle = document.getElementById("chatbot-style");
@@ -321,7 +324,6 @@ function parseQueryString(url) {
 
 // Helper function to get user input message
 function getUserInputMessage() {
-  console.log('userInput', userInput)
   return userInput ? userInput.value.trim() : '';
 }
 
@@ -338,17 +340,22 @@ function clearUserInput() {
 // Helper function to create headers for API requests
 function createHeaders() {
   const headers = new Headers();
-  headers.append("Authorization", `Bearer ${accessToken}`);
+  // headers.append("Authorization", `Bearer ${accessToken}`);
   return headers;
+}
+
+function removeQuota(quotaStr) {
+  return quotaStr.replace(/'/g, '');
 }
 
 // Helper function to create form data for sending messages
 function createFormDataForSendMsg(message) {
   const formdata = new FormData();
-  formdata.append("username", username);
-  formdata.append("modelname", modelname);
   formdata.append("question", message);
-  formdata.append("source_language_code", "en");
+  formdata.append("username", username);
+  formdata.append("api_key", removeQuota(apiKey));
+  formdata.append("chatbot_id",removeQuota(chatBotId));
+  formdata.append("source_language_code", removeQuota(sourceLanguageCode));
   return formdata;
 }
 
@@ -374,7 +381,6 @@ function createFormDataForSendMsg(message) {
 function handleMessageResult(result) {
   const parsedResult = JSON.parse(result || "{}");
   if (parsedResult.StatusCode == 401) {
-    fetchRefreshtoken();
     displayMessage("Something went Wrong, Please try again", "bot", true);
   } else {
     displayBotMessage(JSON.parse(result)?.message);
@@ -497,30 +503,6 @@ function scrollToBottom() {
   }
 }
 
-// Function to refresh the access token using the refresh token
-const fetchRefreshtoken = async () => {
-  // try {
-  //   const response = await fetch(
-  //     `https://dev-auth2api.p2eppl.com/auth/refresh`,
-  //     {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         refresh_token: refreshToken,
-  //       }),
-  //     }
-  //   );
-  //   const responseData = await response.json();
-  //   if (responseData?.result) {
-  //     accessToken = responseData?.result?.access_token;
-  //     sendMessage();
-  //   }
-  // } catch (error) {
-  //   console.error(error);
-  // }
-};
 
 // Function to fetch message from the chatbot API
 function fetchMessage(url, requestOptions) {
@@ -543,4 +525,3 @@ function fetchChatbotDetails(requestOptions) {
  
 // Fetch chatbot details on page load
 getChatbotDetails();
-fetchRefreshtoken();
