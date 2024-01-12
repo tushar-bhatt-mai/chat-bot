@@ -353,7 +353,7 @@ function createFormDataForSendMsg(message) {
   const formdata = new FormData();
   formdata.append("question", message);
   formdata.append("username", username);
-  formdata.append("api_key", removeQuota(apiKey));
+  formdata.append("api_key", removeQuota(apiKey || 'test_dev'));
   formdata.append("chatbot_id",removeQuota(chatBotId));
   formdata.append("source_language_code", removeQuota(sourceLanguageCode));
   return formdata;
