@@ -21,7 +21,7 @@ const {
   chatbotname = window.WebChat.chatbotname,
   // refreshToken = window.WebChat.refreshToken,
   environment = window.WebChat.environment || 'dev',
-  apiKey = window.WebChat.apiKey,
+  apiKey = window.WebChat.apiKey || '',
   chatBotId = window.WebChat.chatBotId,
   sourceLanguageCode = "en"
 } = params || {};
