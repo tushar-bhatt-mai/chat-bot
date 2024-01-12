@@ -16,13 +16,13 @@ const {
   // token: accessToken = window.WebChat.token,
   width = '500',
   height = '800',
-  username = window.WebChat.username,
-  modelname = window.WebChat.modelname,
-  chatbotname = window.WebChat.chatbotname,
+  username = window?.WebChat?.username,
+  modelname = window?.WebChat?.modelname,
+  chatbotname = window?.WebChat?.chatbotname,
   // refreshToken = window.WebChat.refreshToken,
-  environment = window.WebChat.environment || 'dev',
+  environment = window?.WebChat?.environment || 'dev',
   apiKey = window?.WebChat?.apiKey || '',
-  chatBotId = window.WebChat.chatBotId,
+  chatBotId = window?.WebChat?.chatBotId,
   sourceLanguageCode = "en"
 } = params || {};
 
