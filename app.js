@@ -6,38 +6,39 @@ const userInput = document.getElementById("user-input");
 
 // Global variables
 let chatBotResult = {};
-const params = parseQueryString(window.location.href) ||{
-  params:''
+const params = parseQueryString(window.location.href) || {
+  params: "",
 };
 
 var loading = false;
 
 const {
   // token: accessToken = window.WebChat.token,
-  width = '500',
-  height = '800',
+  width = "500",
+  height = "800",
   username = window?.WebChat?.username,
   modelname = window?.WebChat?.modelname,
   chatbotname = window?.WebChat?.chatbotname,
   // refreshToken = window.WebChat.refreshToken,
-  environment = window?.WebChat?.environment || 'dev',
-  apiKey = window?.WebChat?.apiKey || '',
+  environment = window?.WebChat?.environment || "dev",
+  apiKey = window?.WebChat?.apiKey || "",
   chatBotId = window?.WebChat?.chatBotId,
-  sourceLanguageCode = "en"
+  sourceLanguageCode = "en",
 } = params || {};
 
-
-function removeStr(str){
-  return str.replace(/^\s+/, '')
+function removeStr(str) {
+  return str.replace(/^\s+/, "");
 }
 
 // API endpoints
 
-const baseUrlPrediction = `https://${removeStr(environment)}-maibot-predictionapi.p2eppl.com/prediction_with_API_KEY`;
+const baseUrlPrediction = `https://${removeStr(
+  environment
+)}-maibot-predictionapi.p2eppl.com/prediction_with_API_KEY`;
 
-const baseUrlCostomization =
-  `https://${removeStr(environment)}-maibot-chatbot-detailapi.p2eppl.com/get_chatbot_customization`;
-
+const baseUrlCostomization = `https://${removeStr(
+  environment
+)}-maibot-chatbot-detailapi.p2eppl.com/get_chatbot_customization`;
 
 // Function to display logged-in user data
 const loggedInUserData = (data) => {
@@ -54,26 +55,25 @@ const loggedInUserData = (data) => {
 };
 // Helper function to invoked whenever onSubmit is called
 
-document.addEventListener('DOMContentLoaded', function () {
-  const button = document.getElementById('submitBtn');
-  if(button)
-  button.addEventListener('click', function (event) {
-      event.preventDefault(); 
+document.addEventListener("DOMContentLoaded", function () {
+  const button = document.getElementById("submitBtn");
+  if (button)
+    button.addEventListener("click", function (event) {
+      event.preventDefault();
       sendMessage();
-  });
+    });
   toggeleBotHandler();
 });
 
-function sendMessage(){
+function sendMessage() {
   sendMessage();
 }
 
-function changeBgColor(color){
-  const widgetElement = document.getElementById('mySvgElement');
-  if(widgetElement){
-    widgetElement.style.fill = color || 'black';
+function changeBgColor(color) {
+  const widgetElement = document.getElementById("mySvgElement");
+  if (widgetElement) {
+    widgetElement.style.fill = color || "black";
   }
-
 }
 
 // Helper function to get rounded value from display name
@@ -84,7 +84,6 @@ function getRoundedValue(data) {
     .map((word) => word[0])
     .join("");
 }
-
 
 // Helper function to display profile picture
 function displayProfilePicture(container, imageUrl) {
@@ -115,11 +114,14 @@ function initialMessage() {
   setDisplayName();
   setUserInputStyle();
   setInitialValue();
-  displaySuggestedMessages(
-    chatBotResult?.suggested_messages,
-    chatBotResult?.font_size || []
-  );
-  setChatbotStyle();
+  if (chatBotResult?.suggested_messages) {
+    displaySuggestedMessages(
+      chatBotResult?.suggested_messages,
+      chatBotResult?.font_size || []
+    );
+    setChatbotStyle();
+  }
+
   // appendCssInBody();
 }
 
@@ -144,8 +146,8 @@ function setChatBotWidgetColor() {
   const backgroundColor = chatBotResult?.widget_colour || "#c66262";
   const newColor = hexToRgb(backgroundColor);
   const imageElement = document.getElementById("widget-icon-img");
-  if(imageElement){
-  // changeImageColor(imageElement, newColor);
+  if (imageElement) {
+    // changeImageColor(imageElement, newColor);
   }
 }
 
@@ -168,9 +170,9 @@ function changeImageColor(imageElement, newColor) {
     const data = imageData.data;
     for (let i = 0; i < data.length; i += 4) {
       if (data[i + 3] > 0) {
-        data[i] = newColor.red;    
+        data[i] = newColor.red;
         data[i + 1] = newColor.green;
-        data[i + 2] = newColor.blue;  
+        data[i + 2] = newColor.blue;
       }
     }
     context.putImageData(imageData, 0, 0);
@@ -182,7 +184,7 @@ function changeImageColor(imageElement, newColor) {
 
 // Helper function to Convert a hex color code to RGB format
 function hexToRgb(hex) {
-  hex = hex.replace(/^#/, '');
+  hex = hex.replace(/^#/, "");
   const bigint = parseInt(hex, 16);
   const r = (bigint >> 16) & 255;
   const g = (bigint >> 8) & 255;
@@ -190,8 +192,8 @@ function hexToRgb(hex) {
   return { red: r, green: g, blue: b };
 }
 
- // Function to toggle chatbot visibility
- function toggleChatbot() {
+// Function to toggle chatbot visibility
+function toggleChatbot() {
   const chatbotStyle = document.getElementById("chatbot-style");
   const formElementCls = document.getElementById("formElementCls");
   chatbotStyle.classList.toggle("hidden");
@@ -201,9 +203,9 @@ function hexToRgb(hex) {
 }
 
 // Function to invoke toggleBot
-function toggeleBotHandler(){
+function toggeleBotHandler() {
   const widgetIcon = document.getElementById("widget-icon");
-  if(widgetIcon){
+  if (widgetIcon) {
     widgetIcon.addEventListener("click", toggleChatbot);
   }
 }
@@ -231,7 +233,7 @@ function setDisplayName() {
 
 // Helper function to set user input style
 function setUserInputStyle() {
-  if(userInput){
+  if (userInput) {
     userInput.style.fontSize = `${chatBotResult?.font_size}px` || "12px";
   }
 }
@@ -241,7 +243,7 @@ function setInitialValue() {
   const initialValue = document.getElementById("initialValue");
   initialValue.innerHTML = `
     <span class='bot-message'>
-      ${chatBotResult?.initial_message || "Initial Message"}
+      ${chatBotResult?.initial_message || "Hi! What can I help you with?"}
     </span>
     <div class="arrow-left"></div>
   `;
@@ -252,11 +254,10 @@ function setInitialValue() {
 // Helper function to set chatbot style
 function setChatbotStyle() {
   const chatbotStyle = document.getElementById("chatbot-style");
-  if(chatbotStyle){
+  if (chatbotStyle) {
     chatbotStyle.style.fontFamily =
-    chatBotResult?.font_style || "Arial, sans-serif";
+      chatBotResult?.font_style || "Arial, sans-serif";
   }
- 
 }
 
 // Function to display suggested messages
@@ -324,7 +325,7 @@ function parseQueryString(url) {
 
 // Helper function to get user input message
 function getUserInputMessage() {
-  return userInput ? userInput.value.trim() : '';
+  return userInput ? userInput.value.trim() : "";
 }
 
 // Helper function to display user message
@@ -345,7 +346,7 @@ function createHeaders() {
 }
 
 function removeQuota(quotaStr) {
-  return quotaStr.replace(/'/g, '');
+  return quotaStr?.replace(/'/g, "");
 }
 
 // Helper function to create form data for sending messages
@@ -353,15 +354,15 @@ function createFormDataForSendMsg(message) {
   const formdata = new FormData();
   formdata.append("question", message);
   formdata.append("username", username);
-  formdata.append("api_key", removeQuota(apiKey || 'test_dev'));
-  formdata.append("chatbot_id",removeQuota(chatBotId));
+  formdata.append("api_key", removeQuota(apiKey || "test_dev"));
+  formdata.append("chatbot_id", removeQuota(chatBotId));
   formdata.append("source_language_code", removeQuota(sourceLanguageCode));
   return formdata;
 }
 
 // Function to send user message to the chatbot
- function sendMessage(event) {
-  if(event){
+function sendMessage(event) {
+  if (event) {
     event.preventDefault();
   }
   const message = getUserInputMessage();
@@ -426,8 +427,8 @@ function getChatbotDetails() {
 function handleChatbotDetailsResult(result) {
   const parsedResult = JSON.parse(result);
   if (parsedResult.statusCode === 200) {
-    chatBotResult = parsedResult.message;
-    changeBgColor(parsedResult.message.widget_colour)
+    chatBotResult = parsedResult?.message;
+    changeBgColor(parsedResult?.message?.widget_colour);
     initialMessage();
   }
 }
@@ -449,10 +450,10 @@ function createMessageElement(sender) {
     sender === "user" ? "user-messageDev" : "bot-messageDev"
   );
   const arrowDiv = document.createElement("div");
-  if(sender === "user"){
+  if (sender === "user") {
     arrowDiv.classList.add("arrow-right");
     messageElement.appendChild(arrowDiv);
-  }else{
+  } else {
     arrowDiv.classList.add("arrow-left");
     messageElement.appendChild(arrowDiv);
   }
@@ -503,7 +504,6 @@ function scrollToBottom() {
   }
 }
 
-
 // Function to fetch message from the chatbot API
 function fetchMessage(url, requestOptions) {
   fetch(url, requestOptions)
@@ -517,11 +517,11 @@ function fetchMessage(url, requestOptions) {
 
 // Function to fetch chatbot details from the API
 function fetchChatbotDetails(requestOptions) {
-      fetch(baseUrlCostomization, requestOptions)
+  fetch(baseUrlCostomization, requestOptions)
     .then((response) => response.text())
     .then(handleChatbotDetailsResult)
     .catch((error) => console.error("error", error));
-  }
- 
+}
+
 // Fetch chatbot details on page load
 getChatbotDetails();
