@@ -65,9 +65,6 @@ document.addEventListener("DOMContentLoaded", function () {
   toggeleBotHandler();
 });
 
-function sendMessage() {
-  sendMessage();
-}
 
 function changeBgColor(color) {
   const widgetElement = document.getElementById("mySvgElement");
