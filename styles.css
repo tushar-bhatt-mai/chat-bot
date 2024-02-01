@@ -319,3 +319,12 @@ input[type="text"]:focus {
   width: 40px;
   height: 40px;
 }
+
+.bot-message-error{
+    background-color: #eaf1f8;
+    padding: 10px;
+    margin-top: 15px;
+    border-radius: 0.5rem;
+    display: flow-root;
+    flex-wrap: wrap;
+}

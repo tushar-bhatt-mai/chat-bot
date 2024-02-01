@@ -360,31 +360,34 @@ function createFormDataForSendMsg(message) {
   return formdata;
 }
 
+function generateMetaData(message) {
+  const formData = createFormDataForSendMsg(message);
+  const myHeaders = createHeaders();
+  const requestOptions = createRequestOptions(myHeaders, formData);
+  return requestOptions;
+}
+
 // Function to send user message to the chatbot
 function sendMessage(event) {
   if (event) {
     event.preventDefault();
   }
   const message = getUserInputMessage();
-
   if (!message) return;
   displayUserMessage(message);
   clearUserInput();
   hideSuggestionsMsg();
-  const formData = createFormDataForSendMsg(message);
-  const myHeaders = createHeaders();
-  const requestOptions = createRequestOptions(myHeaders, formData);
   loading = true;
-  fetchMessage(baseUrlPrediction, requestOptions);
+  fetchMessage(baseUrlPrediction, generateMetaData(message));
 }
 
 // Helper function to handle the result of the chatbot API
 function handleMessageResult(result) {
   const parsedResult = JSON.parse(result || "{}");
-  if (parsedResult.StatusCode == 401) {
-    displayMessage("Something went Wrong, Please try again", "bot", true);
-  } else {
+  if (parsedResult.statusCode === 200) {
     displayBotMessage(JSON.parse(result)?.message);
+  } else {
+    displayMessage("Failure", "bot", true, true);
   }
 }
 
@@ -433,12 +436,33 @@ function handleChatbotDetailsResult(result) {
   }
 }
 
+// Helper function to generate error message
+function createErrorMessage() {
+  const divElement = document.createElement("div");
+  const span1Element = document.createElement("span");
+  span1Element.classList.add("bot-message-error");
+  span1Element.textContent =
+    "Apologies, an error occurred. Please wait patiently or reach out to support for assistance if issue re-occurs ";
+  const aElement = document.createElement("a");
+  aElement.textContent = "support.";
+  aElement.href = "mailto:maibot@mai.io";
+  span1Element.appendChild(aElement);
+  divElement.appendChild(span1Element);
+
+  return divElement;
+}
+
 // Function to display a message in the chat
-function displayMessage(message, sender, flag) {
+function displayMessage(message, sender, flag, failureStatus) {
   const messageElement = createMessageElement(sender);
   const textSpan = createTextSpan(message, sender, flag);
   loading = false;
-  messageElement.appendChild(textSpan);
+  if (failureStatus) {
+    const errorMessageDiv = createErrorMessage();
+    messageElement.appendChild(errorMessageDiv);
+  } else {
+    messageElement.appendChild(textSpan);
+  }
   chatBox.appendChild(messageElement);
   scrollToBottom();
 }
