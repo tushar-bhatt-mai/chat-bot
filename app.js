@@ -98,8 +98,10 @@ function createImageElement(imageUrl) {
 
 // Helper function to display rounded name
 function displayRoundedName(container, value) {
-  container.style.backgroundColor = "#6D1874";
-  container.innerHTML = value;
+  if(container){
+    container.style.backgroundColor = "#6D1874";
+    container.innerHTML = value;
+  }
 }
 
 // Function to initialize the chat interface
@@ -210,22 +212,28 @@ function toggeleBotHandler() {
 // Helper function to set NavbarSyle color
 function setChatNavbarStyle() {
   const chatNavbar = document.getElementById("chat-Navbar");
-  const backgroundColor = chatBotResult?.background_colour || "bgColor";
-  chatNavbar.style.backgroundColor = backgroundColor;
+  if(chatNavbar){
+    const backgroundColor = chatBotResult?.background_colour || "bgColor";
+    chatNavbar.style.backgroundColor = backgroundColor;
+  }
 }
 
 // Helper function to set "Chat With" display
 function setDisplayChatWith() {
   const displayChatWith = document.getElementById("display-chat");
+  if(displayChatWith){
   displayChatWith.innerHTML = chatBotResult?.display_name ? "Chat With" : "";
   displayChatWith.style.fontSize = `${chatBotResult?.font_size}px` || "12px";
+  }
 }
 
 // Helper function to set display name
 function setDisplayName() {
   const displayName = document.getElementById("display-name");
-  displayName.innerHTML = chatBotResult?.display_name || "";
-  displayName.style.fontSize = `${chatBotResult?.font_size}px` || "12px";
+  if(displayName){
+    displayName.innerHTML = chatBotResult?.display_name || "";
+    displayName.style.fontSize = `${chatBotResult?.font_size}px` || "12px";
+  }
 }
 
 // Helper function to set user input style
@@ -238,7 +246,8 @@ function setUserInputStyle() {
 // Helper function to set initial value
 function setInitialValue() {
   const initialValue = document.getElementById("initialValue");
-  initialValue.innerHTML = `
+  if(initialValue){
+    initialValue.innerHTML = `
     <span class='bot-message'>
       ${chatBotResult?.initial_message || "Hi! What can I help you with?"}
     </span>
@@ -246,6 +255,7 @@ function setInitialValue() {
   `;
 
   initialValue.style.fontSize = `${chatBotResult?.font_size}px` || "12px";
+  }
 }
 
 // Helper function to set chatbot style
@@ -260,7 +270,9 @@ function setChatbotStyle() {
 // Function to display suggested messages
 function displaySuggestedMessages(suggestedMessages, fontSize) {
   const suggestedMessagesContainer = getSuggestedMessagesContainer();
+  if(suggestedMessagesContainer){
   clearSuggestedMessages(suggestedMessagesContainer);
+  }
 
   suggestedMessages.forEach((message) => {
     const suggestionButton = createSuggestionButton(message, fontSize);
