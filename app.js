@@ -550,10 +550,13 @@ function fetchMessage(url, requestOptions) {
 
 // Function to fetch chatbot details from the API
 function fetchChatbotDetails(requestOptions) {
-  fetch(baseUrlCostomization, requestOptions)
+  if(chatbotname){
+    fetch(baseUrlCostomization, requestOptions)
     .then((response) => response.text())
     .then(handleChatbotDetailsResult)
     .catch((error) => console.error("error", error));
+  }
+ 
 }
 
 // Fetch chatbot details on page load
