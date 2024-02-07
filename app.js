@@ -415,7 +415,7 @@ function createFormData(params) {
   const formdata = new FormData();
   formdata.append("username", username);
   formdata.append("chatbot_name", chatbotname);
-  formdata.append("api_key", apiKey);
+  formdata.append("api_key", removeQuota(apiKey));
   return formdata;
 }
 
