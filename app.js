@@ -415,6 +415,7 @@ function createFormData(params) {
   const formdata = new FormData();
   formdata.append("username", username);
   formdata.append("chatbot_name", chatbotname);
+  formdata.append("api_key", apiKey);
   return formdata;
 }
 
@@ -550,7 +551,7 @@ function fetchMessage(url, requestOptions) {
 
 // Function to fetch chatbot details from the API
 function fetchChatbotDetails(requestOptions) {
-  if(chatbotname){
+  if(chatbotname && apiKey){
     fetch(baseUrlCostomization, requestOptions)
     .then((response) => response.text())
     .then(handleChatbotDetailsResult)
