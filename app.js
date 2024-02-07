@@ -551,7 +551,7 @@ function fetchMessage(url, requestOptions) {
 
 // Function to fetch chatbot details from the API
 function fetchChatbotDetails(requestOptions) {
-  if(chatbotname && apiKey){
+  if(chatbotname){
     fetch(baseUrlCostomization, requestOptions)
     .then((response) => response.text())
     .then(handleChatbotDetailsResult)
