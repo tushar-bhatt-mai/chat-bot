@@ -38,7 +38,12 @@ const baseUrlPrediction = `https://${removeStr(
 
 const baseUrlCostomization = `https://${removeStr(
   environment
-)}-maibot-chatbot-detailapi.p2eppl.com/get_chatbot_customization`;
+)}-maibot-trainingapi.p2eppl.com/get_chatbot_customization`;
+
+//const baseUrlCostomization = `https://${removeStr(
+//  environment
+//)}-maibot-chatbot-detailapi.p2eppl.com/get_chatbot_customization`;
+
 
 // Function to display logged-in user data
 const loggedInUserData = (data) => {
