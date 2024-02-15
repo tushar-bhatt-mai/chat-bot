@@ -3,6 +3,7 @@
 // DOM elements
 const chatBox = document.getElementById("chat-box");
 const userInput = document.getElementById("user-input");
+const chatContainer = document.getElementById("chat-container");
 
 // Global variables
 let chatBotResult = {};
@@ -524,9 +525,7 @@ function createLoader(parentElement, message) {
     const spanElement = document.createElement("span");
     loaderDiv.appendChild(spanElement);
   }
-
   parentElement.appendChild(loaderDiv);
-
   setTimeout(() => {
     loaderDiv.style.display = "none";
     parentElement.textContent = message;
@@ -535,16 +534,17 @@ function createLoader(parentElement, message) {
 
 // Helper function to scroll to the bottom of the chat window
 function scrollToBottom() {
-  let chatWindow = document.getElementById("chat-box");
-  let chatContainer = document.getElementById("chat-container");
-  if (chatWindow || chatContainer) {
-    chatContainer.scrollTop = chatWindow.scrollHeight;
-    chatWindow.scrollTop = chatWindow.scrollHeight;
+  if (chatContainer) {
+    chatContainer.scrollTop = chatBox.scrollHeight;
+    setTimeout(() => {
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }, 1000);
   }
 }
 
 // Function to fetch message from the chatbot API
 function fetchMessage(url, requestOptions) {
+  loading = true;
   fetch(url, requestOptions)
     .then((response) => response.text())
     .then(handleMessageResult)
