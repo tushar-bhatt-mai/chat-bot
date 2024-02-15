@@ -14,13 +14,11 @@ const params = parseQueryString(window.location.href) || {
 var loading = false;
 
 const {
-  // token: accessToken = window.WebChat.token,
   width = "500",
   height = "800",
   username = window?.WebChat?.username,
   modelname = window?.WebChat?.modelname,
   chatbotname = window?.WebChat?.chatbotname,
-  // refreshToken = window.WebChat.refreshToken,
   environment = window?.WebChat?.environment || "dev",
   apiKey = window?.WebChat?.apiKey || "",
   chatBotId = window?.WebChat?.chatBotId,
@@ -40,10 +38,6 @@ const baseUrlPrediction = `https://${removeStr(
 const baseUrlCostomization = `https://${removeStr(
   environment
 )}-maibot-trainingapi.p2eppl.com/get_chatbot_customization`;
-
-//const baseUrlCostomization = `https://${removeStr(
-//  environment
-//)}-maibot-chatbot-detailapi.p2eppl.com/get_chatbot_customization`;
 
 
 // Function to display logged-in user data
@@ -80,7 +74,6 @@ function changeBgColor(color) {
 }
 
 // Helper function to get rounded value from display name
-
 function getRoundedValue(data) {
   return data?.display_name
     .split(" ")
@@ -113,7 +106,6 @@ function displayRoundedName(container, value) {
 // Function to initialize the chat interface
 function initialMessage() {
   loggedInUserData(chatBotResult);
-  setChatBotWidgetColor();
   setChatNavbarStyle();
   setDisplayChatWith();
   setDisplayName();
@@ -126,75 +118,6 @@ function initialMessage() {
     );
     setChatbotStyle();
   }
-
-  // appendCssInBody();
-}
-
-// Function to set disply height  or width
-// function appendCssInBody() {
-//   const styleElement = document.createElement('style');
-//   const cssRules = `
-//   #myIframe {
-//       min-height: ${height +'px'|| '900px'} ;
-//       width: ${width +'px' || '500px'};
-//       border: none;
-//     }
-//   `;
-//   styleElement.textContent = cssRules;
-//   console.log("Append css", styleElement)
-//   document.body.appendChild(styleElement);
-//   console.log("document boyd",   document  )
-// }
-
-// Helper function to set widgetColor property
-function setChatBotWidgetColor() {
-  const backgroundColor = chatBotResult?.widget_colour || "#c66262";
-  const newColor = hexToRgb(backgroundColor);
-  const imageElement = document.getElementById("widget-icon-img");
-  if (imageElement) {
-    // changeImageColor(imageElement, newColor);
-  }
-}
-
-/**
- * Change the color of a transparent PNG image.
- *
- * @param {HTMLImageElement} imageElement - The image element to be modified.
- * @param {Object} newColor - The new color to apply in RGB format.
- *                            Example: { red: 255, green: 0, blue: 0 }
- */
-
-function changeImageColor(imageElement, newColor) {
-  const canvas = document.createElement("canvas");
-  const context = canvas.getContext("2d");
-  canvas.width = imageElement.width;
-  canvas.height = imageElement.height;
-  context.drawImage(imageElement, 0, 0, canvas.width, canvas.height);
-  try {
-    const imageData = context?.getImageData(0, 0, canvas.width, canvas.height);
-    const data = imageData.data;
-    for (let i = 0; i < data.length; i += 4) {
-      if (data[i + 3] > 0) {
-        data[i] = newColor.red;
-        data[i + 1] = newColor.green;
-        data[i + 2] = newColor.blue;
-      }
-    }
-    context.putImageData(imageData, 0, 0);
-    imageElement.src = canvas.toDataURL("image/png");
-  } catch (error) {
-    console.error("Error changing image color:", error);
-  }
-}
-
-// Helper function to Convert a hex color code to RGB format
-function hexToRgb(hex) {
-  hex = hex.replace(/^#/, "");
-  const bigint = parseInt(hex, 16);
-  const r = (bigint >> 16) & 255;
-  const g = (bigint >> 8) & 255;
-  const b = bigint & 255;
-  return { red: r, green: g, blue: b };
 }
 
 // Function to toggle chatbot visibility
@@ -506,31 +429,10 @@ function createTextSpan(message, sender, flag) {
   const textSpan = document.createElement("span");
   textSpan.classList.add(sender === "user" ? "user-message" : "bot-message");
   textSpan.style.fontSize = `${chatBotResult?.font_size}px`;
-
-  if (loading && flag && sender === "bot") {
-    createLoader(textSpan, message);
-  } else {
-    textSpan.textContent = message;
-  }
-
+  textSpan.textContent = message;
   return textSpan;
 }
 
-// Helper function to create a loader element
-function createLoader(parentElement, message) {
-  const loaderDiv = document.createElement("div");
-  loaderDiv.className = "loader";
-
-  for (let i = 0; i < 3; i++) {
-    const spanElement = document.createElement("span");
-    loaderDiv.appendChild(spanElement);
-  }
-  parentElement.appendChild(loaderDiv);
-  setTimeout(() => {
-    loaderDiv.style.display = "none";
-    parentElement.textContent = message;
-  }, 1000);
-}
 
 // Helper function to scroll to the bottom of the chat window
 function scrollToBottom() {
@@ -542,14 +444,52 @@ function scrollToBottom() {
   }
 }
 
+// Helper function to create a loader element
+function showLoadingIndicator() {
+  const textSpan = document.createElement("span");
+  textSpan.classList.add("loader-span-div");
+  const loaderDiv = document.createElement("div");
+  loaderDiv.className = "loader";
+
+  const arrowLeftDiv = document.createElement("div");
+  arrowLeftDiv.classList.add("arrow-left");
+  textSpan.appendChild(arrowLeftDiv);
+
+  for (let i = 0; i < 3; i++) {
+    const spanElement = document.createElement("span");
+    loaderDiv.appendChild(spanElement);
+  }
+
+  textSpan.appendChild(loaderDiv);
+  chatBox.appendChild(textSpan);
+  scrollToBottom();
+}
+
+// Function to remove loading indicator
+function removeLoadingIndicator() {
+  const loader = document.querySelector('.loader-span-div');
+  if (loader) {
+      loader.remove();
+  }
+}
+
+// Function to handle errors
+function handleRequestError(error) {
+  console.error("Error occurred:", error);
+  displayMessage("An error occurred. Please try again later.", "bot", false, true);
+  removeLoadingIndicator();
+}
+
 // Function to fetch message from the chatbot API
 function fetchMessage(url, requestOptions) {
   loading = true;
+  showLoadingIndicator();
   fetch(url, requestOptions)
-    .then((response) => response.text())
+    .then((response) =>response.text())
     .then(handleMessageResult)
     .catch(handleError)
     .finally(() => {
+      removeLoadingIndicator()
       loading = false;
     });
 }
@@ -567,3 +507,4 @@ function fetchChatbotDetails(requestOptions) {
 
 // Fetch chatbot details on page load
 getChatbotDetails();
+
