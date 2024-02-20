@@ -39,7 +39,6 @@ const baseUrlCostomization = `https://${removeStr(
   environment
 )}-maibot-trainingapi.p2eppl.com/get_chatbot_customization`;
 
-
 // Function to display logged-in user data
 const loggedInUserData = (data) => {
   const roundedValue = getRoundedValue(data);
@@ -64,7 +63,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   toggeleBotHandler();
 });
-
 
 function changeBgColor(color) {
   const widgetElement = document.getElementById("mySvgElement");
@@ -151,8 +149,8 @@ function setChatNavbarStyle() {
 function setDisplayChatWith() {
   const displayChatWith = document.getElementById("display-chat");
   if(displayChatWith){
-  displayChatWith.innerHTML = chatBotResult?.display_name ? "Chat With" : "";
-  displayChatWith.style.fontSize = `${chatBotResult?.font_size}px` || "12px";
+    displayChatWith.innerHTML = chatBotResult?.display_name ? "Chat With" : "";
+    displayChatWith.style.fontSize = `${chatBotResult?.font_size}px` || "12px";
   }
 }
 
@@ -183,7 +181,7 @@ function setInitialValue() {
     <div class="arrow-left"></div>
   `;
 
-  initialValue.style.fontSize = `${chatBotResult?.font_size}px` || "12px";
+    initialValue.style.fontSize = `${chatBotResult?.font_size}px` || "12px";
   }
 }
 
@@ -200,7 +198,7 @@ function setChatbotStyle() {
 function displaySuggestedMessages(suggestedMessages, fontSize) {
   const suggestedMessagesContainer = getSuggestedMessagesContainer();
   if(suggestedMessagesContainer){
-  clearSuggestedMessages(suggestedMessagesContainer);
+    clearSuggestedMessages(suggestedMessagesContainer);
   }
 
   suggestedMessages.forEach((message) => {
@@ -310,14 +308,29 @@ function sendMessage(event) {
   if (event) {
     event.preventDefault();
   }
+
   const message = getUserInputMessage();
   if (!message) return;
+
   displayUserMessage(message);
-  clearUserInput();
-  hideSuggestionsMsg();
-  loading = true;
-  fetchMessage(baseUrlPrediction, generateMetaData(message));
+
+  if (message.length <= 4) {
+    clearUserInput();
+    hideSuggestionsMsg();
+    displayMessage(
+      "I don't know the answer as it's out of the context!",
+      "bot",
+      false,
+      false
+    );
+  } else {
+    clearUserInput();
+    hideSuggestionsMsg();
+    loading = true;
+    fetchMessage(baseUrlPrediction, generateMetaData(message));
+  }
 }
+
 
 // Helper function to handle the result of the chatbot API
 function handleMessageResult(result) {
@@ -469,7 +482,7 @@ function showLoadingIndicator() {
 function removeLoadingIndicator() {
   const loader = document.querySelector('.loader-span-div');
   if (loader) {
-      loader.remove();
+    loader.remove();
   }
 }
 
@@ -498,11 +511,11 @@ function fetchMessage(url, requestOptions) {
 function fetchChatbotDetails(requestOptions) {
   if(chatbotname){
     fetch(baseUrlCostomization, requestOptions)
-    .then((response) => response.text())
-    .then(handleChatbotDetailsResult)
-    .catch((error) => console.error("error", error));
+      .then((response) => response.text())
+      .then(handleChatbotDetailsResult)
+      .catch((error) => console.error("error", error));
   }
- 
+
 }
 
 // Fetch chatbot details on page load
