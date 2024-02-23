@@ -122,12 +122,12 @@ function initialMessage() {
 function setWidthAndPositionOfChatBot(width) {
   let chatbotContainer = document.getElementById("chatbot-container-script");
   if (chatbotContainer) {
-    width = Math.min(Math.max(width, 250), width);
-    chatbotContainer.style.minWidth = width+'px';
-    chatbotContainer.style.maxWidth = width+'px';
-    chatbotContainer.style.position = 'fixed';
-    chatbotContainer.style.bottom = '17%';
-    chatbotContainer.style.right = '40px';
+    // width = Math.min(Math.max(width, 250), width);
+    // chatbotContainer.style.minWidth = width+'px';
+    // chatbotContainer.style.maxWidth = width+'px';
+    // chatbotContainer.style.position = 'fixed';
+    // chatbotContainer.style.bottom = '17%';
+    // chatbotContainer.style.right = '40px';
   }
 }
 

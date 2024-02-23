@@ -357,3 +357,25 @@ input[type="text"]:focus {
       opacity: 1;
   }
 }
+#chatbot-container-script{
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  min-width: 100%;
+}
+#chatbot-container-script div#chatbot-style{
+max-width: 450px;
+}
+@media (min-width: 992px) and (max-width: 1200px){
+  .chat-container{
+    height: 200px;
+    min-height: 200px;
+  }
+  .chat-container .formElementCls {
+    padding: 10px 25px;
+}
+.chat-container   .formElementCls .powerdByText{
+    margin: 5px;
+  }
+}
