@@ -14,8 +14,8 @@ const params = parseQueryString(window.location.href) || {
 var loading = false;
 
 const {
-  width = "500",
-  height = "800",
+  width = window?.WebChat?.width || "400",
+  height = window?.WebChat?.height || "800",
   username = window?.WebChat?.username,
   modelname = window?.WebChat?.modelname,
   chatbotname = window?.WebChat?.chatbotname,
@@ -95,7 +95,7 @@ function createImageElement(imageUrl) {
 
 // Helper function to display rounded name
 function displayRoundedName(container, value) {
-  if(container){
+  if (container) {
     container.style.backgroundColor = "#6D1874";
     container.innerHTML = value;
   }
@@ -109,12 +109,25 @@ function initialMessage() {
   setDisplayName();
   setUserInputStyle();
   setInitialValue();
+  setWidthAndPositionOfChatBot(width);
   if (chatBotResult?.suggested_messages) {
     displaySuggestedMessages(
       chatBotResult?.suggested_messages,
       chatBotResult?.font_size || []
     );
     setChatbotStyle();
+  }
+}
+
+function setWidthAndPositionOfChatBot(width) {
+  let chatbotContainer = document.getElementById("chatbot-container-script");
+  if (chatbotContainer) {
+    width = Math.min(Math.max(width, 250), width);
+    chatbotContainer.style.minWidth = width+'px';
+    chatbotContainer.style.maxWidth = width+'px';
+    chatbotContainer.style.position = 'fixed';
+    chatbotContainer.style.bottom = '17%';
+    chatbotContainer.style.right = '40px';
   }
 }
 
@@ -226,7 +239,7 @@ function createSuggestionButton(message, fontSize) {
   suggestionButton.textContent = message;
   suggestionButton.classList.add("suggestion-button");
   suggestionButton.style.fontFamily =
-      chatBotResult?.font_style || "Arial, sans-serif";
+    chatBotResult?.font_style || "Arial, sans-serif";
   suggestionButton.style.fontSize = `${fontSize}px` || "12px";
   return suggestionButton;
 }
@@ -530,7 +543,7 @@ function fetchMessage(url, requestOptions) {
     .then(handleMessageResult)
     .catch(handleError)
     .finally(() => {
-      removeLoadingIndicator()
+      removeLoadingIndicator();
       loading = false;
     });
 }
