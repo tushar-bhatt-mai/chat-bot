@@ -173,17 +173,19 @@ function setUserInputStyle() {
 // Helper function to set initial value
 function setInitialValue() {
   const initialValue = document.getElementById("initialValue");
-  if(initialValue){
-    initialValue.innerHTML = `
-    <span class='bot-message'>
-      ${chatBotResult?.initial_message || "Hi! What can I help you with?"}
-    </span>
-    <div class="arrow-left"></div>
-  `;
+  if (initialValue) {
+    initialValue.innerHTML = `<span id="typing-effect" class='bot-message'></span><div class="arrow-left"></div>`;
 
     initialValue.style.fontSize = `${chatBotResult?.font_size}px` || "12px";
+    if (chatBotResult?.initial_message) {
+      const typingElement = document.getElementById("typing-effect");
+      setTimeout(function () {
+        typeMessage(chatBotResult.initial_message, typingElement);
+      }, 0);
+    }
   }
 }
+
 
 // Helper function to set chatbot style
 function setChatbotStyle() {
@@ -437,13 +439,37 @@ function createMessageElement(sender) {
   return messageElement;
 }
 
-// Helper function to create a text span element
 function createTextSpan(message, sender, flag) {
   const textSpan = document.createElement("span");
   textSpan.classList.add(sender === "user" ? "user-message" : "bot-message");
   textSpan.style.fontSize = `${chatBotResult?.font_size}px`;
-  textSpan.textContent = message;
+  if(sender === "user") {
+    textSpan.textContent = message;
+  }else{
+    textSpan.id = "typing-effect";
+    setTimeout(function() {
+      typeMessage(message, textSpan);
+    }, 0);
+  }
   return textSpan;
+}
+
+// Helper function to Typing effect
+
+function typeMessage(message, element) {
+  const typingSpeed = 30;
+  let index = 0;
+
+  function typeWriter() {
+    if (index < message.length) {
+      element.textContent += message.charAt(index);
+      index++;
+      scrollToBottom();
+      setTimeout(typeWriter, typingSpeed);
+    }
+  }
+
+  typeWriter();
 }
 
 
