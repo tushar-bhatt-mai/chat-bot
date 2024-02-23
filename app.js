@@ -225,6 +225,8 @@ function createSuggestionButton(message, fontSize) {
   const suggestionButton = document.createElement("span");
   suggestionButton.textContent = message;
   suggestionButton.classList.add("suggestion-button");
+  suggestionButton.style.fontFamily =
+      chatBotResult?.font_style || "Arial, sans-serif";
   suggestionButton.style.fontSize = `${fontSize}px` || "12px";
   return suggestionButton;
 }
