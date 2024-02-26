@@ -357,8 +357,10 @@ input[type="text"]:focus {
       opacity: 1;
   }
 }
+
+/* 
 #chatbot-container-script{
-    height: 80vh;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: end;
@@ -382,4 +384,4 @@ max-width: 450px;
 .chat-container   .formElementCls .powerdByText{
     margin: 5px;
   }
-}
+} */
