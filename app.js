@@ -337,21 +337,21 @@ function sendMessage(event) {
 
   displayUserMessage(message);
 
-  if (message.length <= 4) {
-    clearUserInput();
-    hideSuggestionsMsg();
-    displayMessage(
-      "I don't know the answer as it's out of the context!",
-      "bot",
-      false,
-      false
-    );
-  } else {
+  // if (message.length <= 4) {
+  //   clearUserInput();
+  //   hideSuggestionsMsg();
+  //   displayMessage(
+  //     "I don't know the answer as it's out of the context!",
+  //     "bot",
+  //     false,
+  //     false
+  //   );
+  // } else {
     clearUserInput();
     hideSuggestionsMsg();
     loading = true;
     fetchMessage(baseUrlPrediction, generateMetaData(message));
-  }
+  // }
 }
 
 
