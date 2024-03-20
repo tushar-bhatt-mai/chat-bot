@@ -12,6 +12,8 @@ const params = parseQueryString(window.location.href) || {
 };
 
 var loading = false;
+var tempResponseHolder = "";
+var userMsg = "";
 
 const {
   width = window?.WebChat?.width || "400",
@@ -23,6 +25,7 @@ const {
   apiKey = window?.WebChat?.apiKey || "",
   chatBotId = window?.WebChat?.chatBotId,
   sourceLanguageCode = "en",
+  leadEnabled = true,
 } = params || {};
 
 function removeStr(str) {
@@ -31,13 +34,19 @@ function removeStr(str) {
 
 // API endpoints
 
+const trainingApi = `https://${removeStr(
+  environment
+)}-maibot-trainingapi.p2eppl.com/`;
+
 const baseUrlPrediction = `https://${removeStr(
   environment
 )}-maibot-predictionapi.p2eppl.com/prediction_with_API_KEY`;
 
-const baseUrlCostomization = `https://${removeStr(
-  environment
-)}-maibot-trainingapi.p2eppl.com/get_chatbot_customization`;
+const baseUrlCostomization = `${trainingApi}get_chatbot_customization`;
+
+const storeChatHistory = `${trainingApi}store_guest_user_chat_history`;
+
+const storeUnmatchedChatHistory = `${trainingApi}store_guest_user_unmatch_query`;
 
 // Function to display logged-in user data
 const loggedInUserData = (data) => {
@@ -123,19 +132,16 @@ function setWidthAndPositionOfChatBot(width) {
   let chatbotContainer = document.getElementById("chatbot-container-script");
   if (chatbotContainer) {
     width = Math.min(Math.max(width, 250), width);
-    chatbotContainer.style.minWidth = '30%';
-    chatbotContainer.style.maxWidth = '30%';
-    chatbotContainer.style.position = 'fixed';
-    chatbotContainer.style.bottom = '10%';
-    chatbotContainer.style.top = '5%';
-    chatbotContainer.style.right = '40px';
-    chatbotContainer.style.minHeight = '50%';
-    chatbotContainer.style.maxHeight = '60% !important';
-    
+    chatbotContainer.style.minWidth = "30%";
+    chatbotContainer.style.maxWidth = "30%";
+    chatbotContainer.style.position = "fixed";
+    chatbotContainer.style.bottom = "10%";
+    chatbotContainer.style.top = "5%";
+    chatbotContainer.style.right = "40px";
+    chatbotContainer.style.minHeight = "50%";
+    chatbotContainer.style.maxHeight = "60% !important";
   }
 }
-
-
 
 // Function to toggle chatbot visibility
 function toggleChatbot() {
@@ -158,7 +164,7 @@ function toggeleBotHandler() {
 // Helper function to set NavbarSyle color
 function setChatNavbarStyle() {
   const chatNavbar = document.getElementById("chat-Navbar");
-  if(chatNavbar){
+  if (chatNavbar) {
     const backgroundColor = chatBotResult?.background_colour || "bgColor";
     chatNavbar.style.backgroundColor = backgroundColor;
   }
@@ -167,7 +173,7 @@ function setChatNavbarStyle() {
 // Helper function to set "Chat With" display
 function setDisplayChatWith() {
   const displayChatWith = document.getElementById("display-chat");
-  if(displayChatWith){
+  if (displayChatWith) {
     displayChatWith.innerHTML = chatBotResult?.display_name ? "Chat With" : "";
     displayChatWith.style.fontSize = `${chatBotResult?.font_size}px` || "12px";
   }
@@ -176,7 +182,7 @@ function setDisplayChatWith() {
 // Helper function to set display name
 function setDisplayName() {
   const displayName = document.getElementById("display-name");
-  if(displayName){
+  if (displayName) {
     displayName.innerHTML = chatBotResult?.display_name || "";
     displayName.style.fontSize = `${chatBotResult?.font_size}px` || "12px";
   }
@@ -205,7 +211,6 @@ function setInitialValue() {
   }
 }
 
-
 // Helper function to set chatbot style
 function setChatbotStyle() {
   const chatbotStyle = document.getElementById("chatbot-style");
@@ -218,7 +223,7 @@ function setChatbotStyle() {
 // Function to display suggested messages
 function displaySuggestedMessages(suggestedMessages, fontSize) {
   const suggestedMessagesContainer = getSuggestedMessagesContainer();
-  if(suggestedMessagesContainer){
+  if (suggestedMessagesContainer) {
     clearSuggestedMessages(suggestedMessagesContainer);
   }
 
@@ -329,31 +334,20 @@ function generateMetaData(message) {
 // Function to send user message to the chatbot
 function sendMessage(event) {
   if (event) {
-    event.preventDefault();
+    event?.preventDefault();
   }
-
+  const userDetailForm = document.getElementById("userDetailForm");
+  if (userDetailForm) {
+    submitForm(event);
+  }
   const message = getUserInputMessage();
   if (!message) return;
-
   displayUserMessage(message);
-
-  // if (message.length <= 4) {
-  //   clearUserInput();
-  //   hideSuggestionsMsg();
-  //   displayMessage(
-  //     "I don't know the answer as it's out of the context!",
-  //     "bot",
-  //     false,
-  //     false
-  //   );
-  // } else {
-    clearUserInput();
-    hideSuggestionsMsg();
-    loading = true;
-    fetchMessage(baseUrlPrediction, generateMetaData(message));
-  // }
+  hideSuggestionsMsg();
+  clearUserInput();
+  loading = true;
+  fetchMessage(baseUrlPrediction, generateMetaData(message), message);
 }
-
 
 // Helper function to handle the result of the chatbot API
 function handleMessageResult(result) {
@@ -394,6 +388,221 @@ function createRequestOptions(headers, body) {
   };
 }
 
+// Variable to get chatbot error
+
+const errorMessageLeadGen = {
+  name: "Min. 2 and max. 25 characters allowed",
+  email: "Please enter a valid email address",
+  phone: "Please enter a valid phone number with 10 digit",
+};
+
+// Helper function to validate name
+
+function validateName(name) {
+  return /^[a-zA-Z ]{2,25}$/.test(name);
+}
+
+// Helper function to validate email
+
+function validateEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+// Helper function to validate phone
+
+function validatePhone(phone) {
+  return /^\d{10}$/.test(phone);
+}
+
+// Helper function to validate all input fields
+
+function validateInput(input) {
+  const nameError = document.getElementById("nameError");
+  const emailError = document.getElementById("emailError");
+  const phoneError = document.getElementById("phoneError");
+  const name = document.getElementById("name");
+  const email = document.getElementById("email");
+  const phone = document.getElementById("phone");
+
+  switch (input.id) {
+    case "name":
+      if (!validateName(input.value)) {
+        nameError.textContent = errorMessageLeadGen.name;
+        name.style.border = "1px solid red";
+        name.style.outline = "red";
+        scrollToBottom();
+      } else {
+        nameError.textContent = "";
+        name.style.border = "";
+        name.style.outline = "";
+      }
+      break;
+    case "email":
+      if (!validateEmail(input.value)) {
+        emailError.textContent = errorMessageLeadGen.email;
+        email.style.border = "1px solid red";
+        email.style.outline = "red";
+        scrollToBottom();
+      } else {
+        emailError.textContent = "";
+        email.style.border = "";
+        email.style.outline = "";
+      }
+      break;
+    case "phone":
+      if (!validatePhone(input.value)) {
+        phoneError.textContent = errorMessageLeadGen.phone;
+        phone.style.border = "1px solid red";
+        phone.style.outline = "red";
+        scrollToBottom();
+      } else {
+        phoneError.textContent = "";
+        phone.style.border = "";
+        phone.style.outline = "";
+      }
+      break;
+    default:
+      break;
+  }
+}
+
+function showForm() {
+  const msg =
+    "Thanks for choosing us! Help us stay connected by sharing your basic details";
+
+  const formHTML = `
+  <form id="userDetailForm" class="userDetailForm" onsubmit="submitForm(event)">
+  <div>
+      <label class="userDetailForm-label" for="name">Enter your name*</label>
+      <br />
+      <input id="name" name="name" class="form-input" placeholder="Please enter the name" required><br>
+      <span id="nameError" class="error-message"></span>
+      </div>
+     
+      <div>
+      <label class="userDetailForm-label" for="email">Enter your email address*</label><br>
+      <input type="email" id="email" name="email" class="form-input" placeholder="Please enter the email" required><br>
+      <span id="emailError" class="error-message"></span>
+      </div>
+     
+      <div>
+      <label class="userDetailForm-label" for="phone">Enter your mobile number*</label><br>
+      <input type="tel" id="phone" name="phone" class="form-input" placeholder="+91" required><br>
+      <span id="phoneError" class="error-message"></span>
+      </div>
+      <br />
+  </form>`;
+
+  displayMessage(msg, "bot", false, false, true);
+
+  const tempDiv = document.createElement("div");
+  tempDiv.innerHTML = formHTML;
+  tempDiv.classList.add("fadeIn");
+
+  chatBox.appendChild(tempDiv);
+
+  const inputs = document.querySelectorAll(".form-input");
+  if (inputs) {
+    inputs.forEach((input) => {
+      input.addEventListener("input", function () {
+        validateInput(this);
+      });
+
+      input.addEventListener("blur", function () {
+        validateInput(this);
+      });
+    });
+  }
+}
+
+// Function to validateForm of user lead
+
+async function submitForm(event) {
+  event?.preventDefault();
+
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
+  const phone = document.getElementById("phone").value;
+
+  const nameError = document.getElementById("nameError");
+  const emailError = document.getElementById("emailError");
+  const phoneError = document.getElementById("phoneError");
+
+  if (!validateName(name)) {
+    nameError.textContent = errorMessageLeadGen.name;
+    return;
+  }
+
+  if (!validateEmail(email)) {
+    emailError.textContent = errorMessageLeadGen.email;
+    return;
+  }
+
+  if (!validatePhone(phone)) {
+    phoneError.textContent = errorMessageLeadGen.phone;
+    return;
+  }
+
+  await saveData(name, email, phone);
+}
+
+// Function to save data for user
+
+async function saveData(name, email, phone) {
+  const userData = {
+    name,
+    email,
+    phone,
+  };
+  localStorage.setItem("userData", JSON.stringify(userData));
+  leadCapture(userData);
+}
+
+// Function to generate  build form data for user
+
+function buildFormDataChatHistory(question, answer, flag, data) {
+  const formData = new FormData();
+  const user = JSON.parse(localStorage.getItem("userData") || "{}");
+  formData.append("name", user?.name || data?.name);
+  formData.append("emailid", user?.email || data?.email);
+  formData.append("contact_number", user?.phone || data?.phone);
+  formData.append("chatbotid", removeQuota(chatBotId));
+  formData.append("isthread", `${flag ? "True" : "False"}`);
+  formData.append("chatbotObj", JSON.stringify({ question, answer }));
+  return formData;
+}
+
+// Function to remove disabled flags
+
+async function leadCapture(data) {
+  userInput.disabled = false;
+  userInput.style.cursor = "auto";
+  removeUserSubmitedFormIndicator();
+  displayMessage(
+    "Thanks for sharing! We will use this info to assist you better",
+    "bot",
+    false,
+    false,
+    false
+  );
+
+  dealyMsgPrint(tempResponseHolder);
+  const formData = buildFormDataChatHistory(
+    userMsg,
+    removeApostrophes(tempResponseHolder),
+    isChatBoxEmpty(),
+    data
+  );
+  await helperFn(storeChatHistory, formData);
+  tempResponseHolder = "";
+}
+
+function dealyMsgPrint(msg) {
+  setTimeout(() => {
+    handleMessageResult(msg);
+  }, 2000);
+}
+
 // Function to get chatbot details on page load
 function getChatbotDetails() {
   const myHeaders = createHeaders();
@@ -428,8 +637,11 @@ function createErrorMessage() {
 }
 
 // Function to display a message in the chat
-function displayMessage(message, sender, flag, failureStatus) {
-  const messageElement = createMessageElement(sender);
+function displayMessage(message, sender, flag, failureStatus, removeElement) {
+  const messageElement = createMessageElement(
+    sender,
+    removeElement ? removeElement : null
+  );
   const textSpan = createTextSpan(message, sender, flag);
   loading = false;
   if (failureStatus) {
@@ -443,8 +655,11 @@ function displayMessage(message, sender, flag, failureStatus) {
 }
 
 // Helper function to create a message element
-function createMessageElement(sender) {
+function createMessageElement(sender, flag) {
   const messageElement = document.createElement("div");
+  if (flag) {
+    messageElement.classList.add("bot-messageDev-remove");
+  }
   messageElement.classList.add(
     sender === "user" ? "user-messageDev" : "bot-messageDev"
   );
@@ -464,11 +679,11 @@ function createTextSpan(message, sender, flag) {
   const textSpan = document.createElement("span");
   textSpan.classList.add(sender === "user" ? "user-message" : "bot-message");
   textSpan.style.fontSize = `${chatBotResult?.font_size}px`;
-  if(sender === "user") {
+  if (sender === "user") {
     textSpan.textContent = message;
-  }else{
+  } else {
     textSpan.id = "typing-effect";
-    setTimeout(function() {
+    setTimeout(function () {
       typeMessage(message, textSpan);
     }, 0);
   }
@@ -492,7 +707,6 @@ function typeMessage(message, element) {
 
   typeWriter();
 }
-
 
 // Helper function to scroll to the bottom of the chat window
 function scrollToBottom() {
@@ -527,26 +741,149 @@ function showLoadingIndicator() {
 
 // Function to remove loading indicator
 function removeLoadingIndicator() {
-  const loader = document.querySelector('.loader-span-div');
+  const loader = document.querySelector(".loader-span-div");
   if (loader) {
     loader.remove();
+  }
+}
+
+// Function to remove loading indicator
+function removeUserSubmitedFormIndicator() {
+  const userDetailForm = document.querySelector(".userDetailForm");
+  const initailMessage = document.querySelector(".bot-messageDev-remove");
+  if (userDetailForm) {
+    userDetailForm.remove();
+    initailMessage.remove();
   }
 }
 
 // Function to handle errors
 function handleRequestError(error) {
   console.error("Error occurred:", error);
-  displayMessage("An error occurred. Please try again later.", "bot", false, true);
+  displayMessage(
+    "An error occurred. Please try again later.",
+    "bot",
+    false,
+    true
+  );
   removeLoadingIndicator();
 }
 
+async function recordUserChatHistory(apiUrl, formData) {
+  try {
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      body: formData,
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error", error);
+  }
+}
+
+async function helperFn(apiEndPoint, formData) {
+  const extractedValues = {};
+  for (const [key, value] of formData.entries()) {
+    extractedValues[key] = value;
+  }
+
+  let apiResponse = "";
+  const obj = JSON.parse(extractedValues.chatbotObj);
+
+  await recordUserChatHistory(apiEndPoint, formData)
+    .then((data) => {
+      apiResponse = data;
+    })
+    .catch((error) => {
+      console.error("Error occurred:", error);
+    })
+    .finally(() => {
+      if (
+        obj?.answer ==
+        removeApostrophes("I don't know the answer as its out of the context!")
+      ) {
+        const userDetails = JSON.parse(localStorage.getItem("userData"));
+        const formDataObj = objectToFormData({
+          emailid: userDetails.email,
+          question: obj?.question,
+          created_at: apiResponse.created_at,
+        });
+        recordUserUnmatchedChatHistory(storeUnmatchedChatHistory, formDataObj);
+      }
+    });
+}
+
+function removeApostrophes(str) {
+  return str.replace(/'/g, "");
+}
+
+function isChatBoxEmpty() {
+  const chatBox = document.getElementById("chat-box");
+  if (chatBox) {
+    const childDivs = chatBox.querySelectorAll(
+      ".user-messageDev, .bot-messageDev"
+    );
+    if (childDivs.length === 2) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function objectToFormData(data) {
+  const formData = new FormData();
+
+  for (const key in data) {
+    if (Object.prototype.hasOwnProperty.call(data, key)) {
+      formData.append(key, data[key]);
+    }
+  }
+
+  return formData;
+}
+
+async function recordUserUnmatchedChatHistory(apiUrl, formData) {
+  try {
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      body: formData,
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error", error);
+  }
+}
+
 // Function to fetch message from the chatbot API
-function fetchMessage(url, requestOptions) {
+
+function fetchMessage(url, requestOptions, message) {
   loading = true;
   showLoadingIndicator();
   fetch(url, requestOptions)
-    .then((response) =>response.text())
-    .then(handleMessageResult)
+    .then((response) => response.text())
+    .then((data) => {
+      const userData = localStorage.getItem("userData");
+      tempResponseHolder = data;
+      if (!userData && leadEnabled === true) {
+        showForm();
+        userInput.disabled = true;
+        userInput.style.cursor = "not-allowed";
+      } else {
+        handleMessageResult(data);
+        if (leadEnabled === true) {
+          const msg = JSON.parse(data);
+          const formData = buildFormDataChatHistory(
+            message,
+            removeApostrophes(msg?.message),
+            isChatBoxEmpty()
+          );
+          helperFn(storeChatHistory, formData);
+        }
+      }
+      userMsg = message;
+    })
     .catch(handleError)
     .finally(() => {
       removeLoadingIndicator();
@@ -556,15 +893,13 @@ function fetchMessage(url, requestOptions) {
 
 // Function to fetch chatbot details from the API
 function fetchChatbotDetails(requestOptions) {
-  if(chatbotname){
+  if (chatbotname) {
     fetch(baseUrlCostomization, requestOptions)
       .then((response) => response.text())
       .then(handleChatbotDetailsResult)
       .catch((error) => console.error("error", error));
   }
-
 }
 
 // Fetch chatbot details on page load
 getChatbotDetails();
-

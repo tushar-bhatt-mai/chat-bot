@@ -2,7 +2,7 @@
   --main-color: #eaf1f8;
   --input-btn: #6d1874;
   --border-color: #ccc;
-   overflow-x: hidden;
+  overflow-x: hidden;
 }
 body {
   font-family: Arial, sans-serif;
@@ -53,8 +53,8 @@ body {
 .bot-messageDev {
   margin: 25px 0;
   position: relative;
-  }
-  
+}
+
 .message-form {
   display: flex;
   justify-content: space-between;
@@ -102,8 +102,8 @@ input[type="text"]:focus {
   font-family: Inter;
   border: none;
   padding-left: 10px;
-  }
-button{
+}
+button {
   border-radius: 50% !important;
   outline: none;
   border: none;
@@ -111,7 +111,6 @@ button{
   height: 60px;
   background: none;
   cursor: pointer;
-
 }
 
 .submitBtn {
@@ -251,13 +250,16 @@ button{
   letter-spacing: 0px;
   text-align: center;
 }
-strong {
+.strong {
   font-family: Inter;
   font-size: 12px;
   font-weight: 700;
   line-height: 24px;
   letter-spacing: 0px;
   text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+  color: #161518;
 }
 
 .formElementCls {
@@ -323,24 +325,24 @@ input[type="text"]:focus {
   height: 40px;
 }
 
-.bot-message-error{
-    background-color: #eaf1f8;
-    padding: 10px;
-    margin-top: 15px;
-    border-radius: 0.5rem;
-    display: flow-root;
-    flex-wrap: wrap;
+.bot-message-error {
+  background-color: #eaf1f8;
+  padding: 10px;
+  margin-top: 15px;
+  border-radius: 0.5rem;
+  display: flow-root;
+  flex-wrap: wrap;
 }
-.loader{
-    background-color: #eaf1f8;
-    padding: 10px;
-    margin-top: 15px;
-    border-radius: 0.5rem;
-    display: flex;
-    flex-wrap: wrap;
+.loader {
+  background-color: #eaf1f8;
+  padding: 10px;
+  margin-top: 15px;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
 }
 
-.loader-span-div{
+.loader-span-div {
   position: relative;
 }
 
@@ -351,37 +353,78 @@ input[type="text"]:focus {
 
 @keyframes fadeIn {
   from {
-      opacity: 0;
+    opacity: 0;
   }
   to {
-      opacity: 1;
+    opacity: 1;
+  }
+}
+.form-input {
+  width: 95%;
+  margin-top: 2px;
+  height: 30px;
+  top: 346px;
+  left: 39px;
+  border-radius: 8px;
+  border: 1px;
+  padding: 2px;
+  padding-left: 8px;
+}
+
+.userDetailForm-label {
+  width: 187px;
+  height: 24px;
+  top: 322px;
+  left: 39px;
+  font-family: Inter;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: 0px;
+  color: #716a79;
+}
+
+#userDetailForm {
+  width: 98%;
+  background-color: #eaf1f8 !important;
+  padding: 5px;
+  border-radius: 0.5rem;
+}
+#userDetailForm > div {
+  margin-left: 2%;
+  margin-top: 2%;
+}
+
+.error-message {
+  color: red;
+  font-family: Inter;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0.25px;
+  text-align: left;
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
-/* 
-#chatbot-container-script{
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: end;
-    min-width: 100%;
-    overflow-x: hidden;
-    padding: 8px;
+.fadeIn {
+  animation: fadeIn 0.5s ease forwards;
+  margin-top: -15px;
 }
 
+.form-input{
+  border: 1px solid #DDDAE0;
+  color: #161518;
+  background-color: white;
 
-#chatbot-container-script div#chatbot-style{
-max-width: 450px;
 }
-@media (min-width: 992px) and (max-width: 1200px){
-  .chat-container{
-    height: 200px;
-    min-height: 200px;
-  }
-  .chat-container .formElementCls {
-    padding: 10px 25px;
-}
-.chat-container   .formElementCls .powerdByText{
-    margin: 5px;
-  }
-} */
