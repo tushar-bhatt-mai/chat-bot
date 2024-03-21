@@ -411,7 +411,7 @@ function validateEmail(email) {
 // Helper function to validate phone
 
 function validatePhone(phone) {
-  return /^\d{10}$/.test(phone);
+  return /^[6-9]\d{9}$/.test(phone);
 }
 
 // Helper function to validate all input fields
@@ -587,9 +587,10 @@ async function leadCapture(data) {
   );
 
   dealyMsgPrint(tempResponseHolder);
+  const tempData = JSON.parse(tempResponseHolder);
   const formData = buildFormDataChatHistory(
     userMsg,
-    removeApostrophes(tempResponseHolder),
+    removeApostrophes(tempData?.message),
     isChatBoxEmpty(),
     data
   );
