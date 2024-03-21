@@ -802,9 +802,9 @@ async function helperFn(apiEndPoint, formData) {
     .finally(() => {
       if (
         obj?.answer ==
-        removeApostrophes("I don't know the answer as its out of the context!")
+        removeApostrophes("I don't know the answer as its out of the context!" || obj.answer ===removeApostrophes("I don't know the answer as it is out of context."))
       ) {
-        const userDetails = JSON.parse(localStorage.getItem("userData"));
+                const userDetails = JSON.parse(localStorage.getItem("userData"));
         const formDataObj = objectToFormData({
           emailid: userDetails.email,
           question: obj?.question,
