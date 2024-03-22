@@ -71,6 +71,13 @@ document.addEventListener("DOMContentLoaded", function () {
       sendMessage();
     });
   toggeleBotHandler();
+  inputFieldHandler();
+});
+
+// Helper function to invoked whenever onChange is called inputField
+
+document.getElementById("user-input").addEventListener("input", function () {
+  inputFieldHandler();
 });
 
 function changeBgColor(color) {
@@ -331,6 +338,22 @@ function generateMetaData(message) {
   return requestOptions;
 }
 
+// Helper function to validate input field
+
+function inputFieldHandler() {
+  const submitBtn = document.getElementById("submitBtn");
+  const userInput = document.getElementById("user-input");
+  const message = getUserInputMessage();
+
+  if (submitBtn && userInput && message.length < 2) {
+    submitBtn.disabled = true;
+    submitBtn.classList.add("disabled-button");
+  } else if (submitBtn) {
+    submitBtn.disabled = false;
+    submitBtn.classList.remove("disabled-button");
+  }
+}
+
 // Function to send user message to the chatbot
 function sendMessage(event) {
   if (event) {
@@ -341,7 +364,8 @@ function sendMessage(event) {
     submitForm(event);
   }
   const message = getUserInputMessage();
-  if (!message) return;
+  if (message.length < 2) return;
+
   displayUserMessage(message);
   hideSuggestionsMsg();
   clearUserInput();
@@ -792,12 +816,19 @@ async function helperFn(apiEndPoint, formData) {
   let apiResponse = "";
   const obj = JSON.parse(extractedValues.chatbotObj);
 
-  if (obj.answer=== "Please enter some valid question (number of characters >= 5)") {
-    formData.delete('chatbotObj');
-    formData.append('chatbotObj', JSON.stringify({
-      "question": obj.question,
-      "answer": "Apologies, an error occurred. Please wait patiently or reach out to support for assistance if issue re-occurs"
-    })); 
+  if (
+    obj.answer ===
+    "Please enter some valid question (number of characters >= 5)"
+  ) {
+    formData.delete("chatbotObj");
+    formData.append(
+      "chatbotObj",
+      JSON.stringify({
+        question: obj.question,
+        answer:
+          "Apologies, an error occurred. Please wait patiently or reach out to support for assistance if issue re-occurs",
+      })
+    );
   }
 
   await recordUserChatHistory(apiEndPoint, formData)
@@ -809,11 +840,10 @@ async function helperFn(apiEndPoint, formData) {
     })
     .finally(() => {
       if (
-        obj?.answer == "I dont know the answer as it is out of the context." ||
-        obj?.answer ==
-          removeApostrophes(
-            "Thanks for your question! We`re looking into it and will get back to you soon. Feel free to ask anything else in the meantime!"
-          )
+        obj?.answer.trim() ==
+        removeApostrophes(
+          "Thanks for your question! We`re looking into it and will get back to you soon. Feel free to ask anything else in the meantime!"
+        )
       ) {
         const userDetails = JSON.parse(localStorage.getItem("userData"));
         const formDataObj = objectToFormData({
