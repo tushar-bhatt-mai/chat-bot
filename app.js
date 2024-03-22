@@ -792,6 +792,14 @@ async function helperFn(apiEndPoint, formData) {
   let apiResponse = "";
   const obj = JSON.parse(extractedValues.chatbotObj);
 
+  if (obj.answer=== "Please enter some valid question (number of characters >= 5)") {
+    formData.delete('chatbotObj');
+    formData.append('chatbotObj', JSON.stringify({
+      "question": obj.question,
+      "answer": "Apologies, an error occurred. Please wait patiently or reach out to support for assistance if issue re-occurs"
+    })); 
+  }
+
   await recordUserChatHistory(apiEndPoint, formData)
     .then((data) => {
       apiResponse = data;
@@ -804,7 +812,7 @@ async function helperFn(apiEndPoint, formData) {
         obj?.answer == "I dont know the answer as it is out of the context." ||
         obj?.answer ==
           removeApostrophes(
-            "I don't know the answer as its out of the context!"
+            "Thanks for your question! We`re looking into it and will get back to you soon. Feel free to ask anything else in the meantime!"
           )
       ) {
         const userDetails = JSON.parse(localStorage.getItem("userData"));
