@@ -342,13 +342,16 @@ function generateMetaData(message) {
 
 function inputFieldHandler() {
   const submitBtn = document.getElementById("submitBtn");
-  const userInput = document.getElementById("user-input");
+  const userDetailForm = document.getElementById("userDetailForm");
+  
   const message = getUserInputMessage();
 
-  if (submitBtn && userInput && message.length < 2) {
+  if (message.trim().length <= 2) {
     submitBtn.disabled = true;
     submitBtn.classList.add("disabled-button");
-  } else if (submitBtn) {
+  }
+
+  if (userDetailForm || message.trim().length >= 2) {
     submitBtn.disabled = false;
     submitBtn.classList.remove("disabled-button");
   }
@@ -537,6 +540,14 @@ function showForm() {
       });
     });
   }
+  const submitBtn = document.getElementById("submitBtn");
+
+  if(submitBtn){
+    submitBtn.disabled = false;
+    submitBtn.classList.remove("disabled-button");
+  }
+
+  
 }
 
 // Function to validateForm of user lead
