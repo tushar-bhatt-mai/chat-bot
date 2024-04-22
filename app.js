@@ -72,6 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   toggeleBotHandler();
   inputFieldHandler();
+  fetchUserDetail();
 });
 
 // Helper function to invoked whenever onChange is called inputField
@@ -911,6 +912,23 @@ async function recordUserUnmatchedChatHistory(apiUrl, formData) {
     console.error("Error", error);
   }
 }
+
+// Functions to fetch user current location information 
+
+// TODO: remove token and keep it .env
+
+ async function fetchUserDetail(){
+
+const requestOptions = {
+  method: "GET",
+  redirect: "follow"
+};
+
+fetch("https://ipinfo.io/?token=2f77ad2cd2499f", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+ }
 
 // Function to fetch message from the chatbot API
 
