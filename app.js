@@ -596,11 +596,13 @@ async function saveData(name, email, phone) {
 // Function to generate  build form data for user
 
 function buildFormDataChatHistory(question, answer, flag, data) {
+
+  const enabledLead = chatBotResult?.is_lead_capture
   const formData = new FormData();
   const user = JSON.parse(localStorage.getItem("userData") || "{}");
-  formData.append("name", user?.name || data?.name);
-  formData.append("emailid", user?.email || data?.email);
-  formData.append("contact_number", user?.phone || data?.phone);
+  formData.append("name", !enabledLead ? "Pavitra Kumar" : user?.name || data?.name);
+  formData.append("emailid", !enabledLead ? "support@maibot.net" : user?.email || data?.email);
+  formData.append("contact_number",!enabledLead ? "9999999999" : user?.phone || data?.phone);
   formData.append("chatbotid", removeQuota(chatBotId));
   formData.append("isthread", `${flag ? "True" : "False"}`);
   formData.append("chatbotObj", JSON.stringify({ question, answer }));
@@ -857,8 +859,9 @@ async function helperFn(apiEndPoint, formData) {
         )
       ) {
         const userDetails = JSON.parse(localStorage.getItem("userData"));
+        const enabledLead = chatBotResult?.is_lead_capture
         const formDataObj = objectToFormData({
-          emailid: userDetails.email,
+          emailid: !enabledLead ? "support@maibot.net" :  userDetails.email,
           question: obj?.question,
           created_at: apiResponse.created_at,
         });
@@ -919,13 +922,12 @@ function fetchMessage(url, requestOptions, message) {
     .then((data) => {
       const userData = localStorage.getItem("userData");
       tempResponseHolder = data;
-      if (!userData && leadEnabled === true) {
+      if (!userData && leadEnabled === true && chatBotResult?.is_lead_capture) {
         showForm();
         userInput.disabled = true;
         userInput.style.cursor = "not-allowed";
       } else {
         handleMessageResult(data);
-        if (leadEnabled === true) {
           const msg = JSON.parse(data);
           const formData = buildFormDataChatHistory(
             message,
@@ -933,7 +935,6 @@ function fetchMessage(url, requestOptions, message) {
             isChatBoxEmpty()
           );
           helperFn(storeChatHistory, formData);
-        }
       }
       userMsg = message;
     })
@@ -953,6 +954,7 @@ function fetchChatbotDetails(requestOptions) {
       .catch((error) => console.error("error", error));
   }
 }
+
 
 // Fetch chatbot details on page load
 getChatbotDetails();
