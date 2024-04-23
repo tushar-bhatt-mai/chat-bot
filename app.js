@@ -616,7 +616,7 @@ function buildFormDataChatHistory(question, answer, flag, data) {
 
   formData.append("ipAddress", userDetailResult.ip || null);
 
-  formData.append("user-info", JSON.stringify(removeKeysFromObj(userDetailResult)));
+  formData.append("user_info", JSON.stringify(removeKeysFromObj(userDetailResult)));
 
   formData.append("guest_unique_id", uniqueIdGenerator());
 
@@ -971,7 +971,7 @@ async function helperFn(apiEndPoint, formData) {
           created_at: apiResponse.created_at,
           ipAddress: userDetailResult.ip || null,
           "guest_unique_id": uniqueIdGenerator(),
-          "user-info": JSON.stringify(removeKeysFromObj(userDetailResult)),
+          "user_info": JSON.stringify(removeKeysFromObj(userDetailResult)),
 
         });
         recordUserUnmatchedChatHistory(storeUnmatchedChatHistory, formDataObj);
