@@ -1066,13 +1066,16 @@ function fetchMessage(url, requestOptions, message) {
         userInput.style.cursor = "not-allowed";
       } else {
         handleMessageResult(data);
-        const msg = JSON.parse(data);
-        const formData = buildFormDataChatHistory(
-          message,
-          removeApostrophes(msg?.message),
-          isChatBoxEmpty()
-        );
-        helperFn(storeChatHistory, formData);
+        if (leadEnabled === true) {
+          const msg = JSON.parse(data);
+          const formData = buildFormDataChatHistory(
+            message,
+            removeApostrophes(msg?.message),
+            isChatBoxEmpty()
+          );
+          helperFn(storeChatHistory, formData);
+        }
+        
       }
       userMsg = message;
     })
