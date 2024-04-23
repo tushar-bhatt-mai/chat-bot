@@ -7,6 +7,7 @@ const chatContainer = document.getElementById("chat-container");
 
 // Global variables
 let chatBotResult = {};
+let userDetailResult = {};
 const params = parseQueryString(window.location.href) || {
   params: "",
 };
@@ -72,7 +73,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   toggeleBotHandler();
   inputFieldHandler();
-  fetchUserDetail();
 });
 
 // Helper function to invoked whenever onChange is called inputField
@@ -344,7 +344,7 @@ function generateMetaData(message) {
 function inputFieldHandler() {
   const submitBtn = document.getElementById("submitBtn");
   const userDetailForm = document.getElementById("userDetailForm");
-  
+
   const message = getUserInputMessage();
 
   if (message.trim().length <= 2) {
@@ -543,12 +543,10 @@ function showForm() {
   }
   const submitBtn = document.getElementById("submitBtn");
 
-  if(submitBtn){
+  if (submitBtn) {
     submitBtn.disabled = false;
     submitBtn.classList.remove("disabled-button");
   }
-
-  
 }
 
 // Function to validateForm of user lead
@@ -597,16 +595,33 @@ async function saveData(name, email, phone) {
 // Function to generate  build form data for user
 
 function buildFormDataChatHistory(question, answer, flag, data) {
-
-  const enabledLead = chatBotResult?.is_lead_capture
+  const enabledLead = chatBotResult?.is_lead_capture;
   const formData = new FormData();
   const user = JSON.parse(localStorage.getItem("userData") || "{}");
-  formData.append("name", !enabledLead ? "Pavitra Kumar" : user?.name || data?.name);
-  formData.append("emailid", !enabledLead ? "support@maibot.net" : user?.email || data?.email);
-  formData.append("contact_number",!enabledLead ? "9999999999" : user?.phone || data?.phone);
+  formData.append(
+    "name",
+    !enabledLead ? null : user?.name || data?.name
+  );
+  formData.append(
+    "emailid",
+    !enabledLead ? null : user?.email || data?.email
+  );
+  formData.append(
+    "contact_number",
+    !enabledLead ? null : user?.phone || data?.phone
+  );
   formData.append("chatbotid", removeQuota(chatBotId));
+
   formData.append("isthread", `${flag ? "True" : "False"}`);
+
+  formData.append("ipAddress", userDetailResult.ip || null);
+
+  formData.append("user-info", JSON.stringify(removeKeysFromObj(userDetailResult)));
+
+  formData.append("guest_unique_id", uniqueIdGenerator());
+
   formData.append("chatbotObj", JSON.stringify({ question, answer }));
+
   return formData;
 }
 
@@ -778,6 +793,95 @@ function showLoadingIndicator() {
   scrollToBottom();
 }
 
+// Helper function to remove keys from object
+
+function removeKeysFromObj(obj){
+  return {
+    city: obj?.city,
+    country: obj?.country,
+    postal: obj?.postal,
+    region: obj?.region,
+    timezone: obj?.timezone,
+    loc: obj?.loc,
+    device : obj?.device,
+    browser: obj?.browser
+  }
+} 
+
+// Helper function to get user browser and device details
+
+function getBrowserAndDevice() {
+  let userAgent = window.navigator.userAgent;
+
+  let browser = "Unknown";
+
+  if (userAgent.indexOf("Firefox") > -1) {
+    browser = "Mozilla Firefox";
+  } else if (userAgent.indexOf("Chrome") > -1) {
+    browser = "Google Chrome";
+  } else if (userAgent.indexOf("Safari") > -1) {
+    browser = "Safari";
+  } else if (
+    userAgent.indexOf("MSIE") > -1 ||
+    userAgent.indexOf("Trident/") > -1
+  ) {
+    browser = "Internet Explorer";
+  } else if (userAgent.indexOf("Edge") > -1) {
+    browser = "Microsoft Edge";
+  } else if (userAgent.indexOf("Opera") > -1 || userAgent.indexOf("OPR") > -1) {
+    browser = "Opera";
+  }
+
+  let device = "Unknown";
+  if (/iPhone|iPad|iPod/i.test(userAgent)) {
+    device = "iOS Device";
+  } else if (/Android/i.test(userAgent)) {
+    device = "Android Device";
+  } else if (/Windows Phone/i.test(userAgent)) {
+    device = "Windows Phone";
+  } else if (/Windows/i.test(userAgent)) {
+    device = "Windows PC";
+  } else if (/Macintosh/i.test(userAgent)) {
+    device = "Macintosh";
+  } else if (/Linux/i.test(userAgent)) {
+    device = "Linux PC";
+  }
+
+  return {
+    browser: browser,
+    device: device,
+  };
+}
+
+// Helper function to parse cordinates
+
+function parseCoordinates(coordinatesString) {
+  let parts = coordinatesString.split(",");
+  let lat = parseFloat(parts[0]);
+  let long = parseFloat(parts[1]);
+  return { lat, long };
+}
+
+// Helper function to generate unique id
+
+function uniqueIdGenerator(){
+  const date = new Date();
+  return date.getTime();
+}
+
+// Helper function to append Keys of browsers details and others information
+
+function userDetailsHandler(obj) {
+  const { device, browser } = getBrowserAndDevice();
+  delete obj?.org;
+  return {
+    ...obj,
+    loc: parseCoordinates(obj?.loc),
+    browser: browser,
+    device: device
+  };
+}
+
 // Function to remove loading indicator
 function removeLoadingIndicator() {
   const loader = document.querySelector(".loader-span-div");
@@ -860,16 +964,21 @@ async function helperFn(apiEndPoint, formData) {
         )
       ) {
         const userDetails = JSON.parse(localStorage.getItem("userData"));
-        const enabledLead = chatBotResult?.is_lead_capture
+        const enabledLead = chatBotResult?.is_lead_capture;
         const formDataObj = objectToFormData({
-          emailid: !enabledLead ? "support@maibot.net" :  userDetails.email,
+          emailid: !enabledLead ? null : userDetails.email,
           question: obj?.question,
           created_at: apiResponse.created_at,
+          ipAddress: userDetailResult.ip || null,
+          "guest_unique_id": uniqueIdGenerator(),
+          "user-info": JSON.stringify(removeKeysFromObj(userDetailResult)),
+
         });
         recordUserUnmatchedChatHistory(storeUnmatchedChatHistory, formDataObj);
       }
     });
 }
+
 
 function removeApostrophes(str) {
   return str.replace(/'/g, "");
@@ -900,6 +1009,7 @@ function objectToFormData(data) {
   return formData;
 }
 
+
 async function recordUserUnmatchedChatHistory(apiUrl, formData) {
   try {
     const response = await fetch(apiUrl, {
@@ -913,22 +1023,32 @@ async function recordUserUnmatchedChatHistory(apiUrl, formData) {
   }
 }
 
-// Functions to fetch user current location information 
+// Functions to fetch user current location information
 
 // TODO: remove token and keep it .env
 
- async function fetchUserDetail(){
+async function fetchUserDetail() {
+  try {
+    const response = await fetch("https://ipinfo.io/?token=2f77ad2cd2499f");
+    const data = await response.json();
+    return userDetailsHandler(data);
+  } catch (error) {
+    console.error("There was a problem with your fetch operation:", error);
+    return {}
+  }
+}
 
-const requestOptions = {
-  method: "GET",
-  redirect: "follow"
-};
+async function fetchAndLogUserDetail() {
+  try {
+    userDetailResult = await fetchUserDetail();
+  } catch (error) {
+    userDetailResult ={};
+    console.error("Error fetching user detail:", error);
+  }
+}
 
-fetch("https://ipinfo.io/?token=2f77ad2cd2499f", requestOptions)
-  .then((response) => response.text())
-  .then((result) => console.log(result))
-  .catch((error) => console.error(error));
- }
+fetchAndLogUserDetail();
+
 
 // Function to fetch message from the chatbot API
 
@@ -946,13 +1066,13 @@ function fetchMessage(url, requestOptions, message) {
         userInput.style.cursor = "not-allowed";
       } else {
         handleMessageResult(data);
-          const msg = JSON.parse(data);
-          const formData = buildFormDataChatHistory(
-            message,
-            removeApostrophes(msg?.message),
-            isChatBoxEmpty()
-          );
-          helperFn(storeChatHistory, formData);
+        const msg = JSON.parse(data);
+        const formData = buildFormDataChatHistory(
+          message,
+          removeApostrophes(msg?.message),
+          isChatBoxEmpty()
+        );
+        helperFn(storeChatHistory, formData);
       }
       userMsg = message;
     })
@@ -972,7 +1092,6 @@ function fetchChatbotDetails(requestOptions) {
       .catch((error) => console.error("error", error));
   }
 }
-
 
 // Fetch chatbot details on page load
 getChatbotDetails();
