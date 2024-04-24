@@ -600,21 +600,21 @@ function buildFormDataChatHistory(question, answer, flag, data) {
   const user = JSON.parse(localStorage.getItem("userData") || "{}");
   formData.append(
     "name",
-    !enabledLead ? null : user?.name || data?.name
+    !enabledLead ? "" : user?.name || data?.name
   );
   formData.append(
     "emailid",
-    !enabledLead ? null : user?.email || data?.email
+    !enabledLead ? "" : user?.email || data?.email
   );
   formData.append(
     "contact_number",
-    !enabledLead ? null : user?.phone || data?.phone
+    !enabledLead ? "" : user?.phone || data?.phone
   );
   formData.append("chatbotid", removeQuota(chatBotId));
 
   formData.append("isthread", `${flag ? "True" : "False"}`);
 
-  formData.append("ipAddress", userDetailResult.ip || null);
+  formData.append("ipAddress", userDetailResult.ip || "");
 
   formData.append("user_info", JSON.stringify(removeKeysFromObj(userDetailResult)));
 
@@ -966,10 +966,10 @@ async function helperFn(apiEndPoint, formData) {
         const userDetails = JSON.parse(localStorage.getItem("userData"));
         const enabledLead = chatBotResult?.is_lead_capture;
         const formDataObj = objectToFormData({
-          emailid: !enabledLead ? null : userDetails.email,
+          emailid: !enabledLead ? "" : userDetails.email,
           question: obj?.question,
           created_at: apiResponse.created_at,
-          ipAddress: userDetailResult.ip || null,
+          ipAddress: userDetailResult.ip || "",
           "guest_unique_id": uniqueIdGenerator(),
           "user_info": JSON.stringify(removeKeysFromObj(userDetailResult)),
 
