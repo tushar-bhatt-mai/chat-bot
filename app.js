@@ -493,29 +493,32 @@ function validateInput(input) {
       break;
   }
 }
+const cssGenerator = ()=>{
+  return `font-style:${chatBotResult?.font_style};font-size: ${chatBotResult?.font_size}px`;
+}
 
 function showForm() {
   const msg =
     "Thanks for choosing us! Help us stay connected by sharing your basic details";
 
   const formHTML = `
-  <form id="userDetailForm" class="userDetailForm" onsubmit="submitForm(event)">
-  <div>
-      <label class="userDetailForm-label" for="name">Enter your name*</label>
+  <form id="userDetailForm"  class="userDetailForm" onsubmit="submitForm(event)">
+  <div style=>
+      <label class="userDetailForm-label" style="${cssGenerator()}" for="name">Enter your name*</label>
       <br />
-      <input id="name" name="name" class="form-input" placeholder="Please enter the name" required><br>
+      <input id="name" name="name" class="form-input" style="${cssGenerator()}" placeholder="Please enter the name" required><br>
       <span id="nameError" class="error-message"></span>
       </div>
      
       <div>
-      <label class="userDetailForm-label" for="email">Enter your email address*</label><br>
-      <input type="email" id="email" name="email" class="form-input" placeholder="Please enter the email" required><br>
+      <label class="userDetailForm-label" for="email" style="${cssGenerator()}" >Enter your email address*</label><br>
+      <input type="email" id="email" name="email" style="${cssGenerator()}" class="form-input" placeholder="Please enter the email" required><br>
       <span id="emailError" class="error-message"></span>
       </div>
      
       <div>
-      <label class="userDetailForm-label" for="phone">Enter your mobile number*</label><br>
-      <input type="tel" id="phone" name="phone" class="form-input" placeholder="+91" required><br>
+      <label class="userDetailForm-label" style="${cssGenerator()}" for="phone">Enter your mobile number*</label><br>
+      <input type="tel" id="phone" name="phone"  style="${cssGenerator()}" class="form-input" placeholder="+91" required><br>
       <span id="phoneError" class="error-message"></span>
       </div>
       <br />
