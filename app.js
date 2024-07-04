@@ -682,6 +682,8 @@ function createErrorMessage() {
   const divElement = document.createElement("div");
   const span1Element = document.createElement("span");
   span1Element.classList.add("bot-message-error");
+  span1Element.style.fontSize = `${chatBotResult?.font_size}px` || '12px';
+  span1Element.style.fontFamily = chatBotResult?.font_style || "Arial, sans-serif";
   span1Element.textContent =
     "Apologies, an error occurred. Please wait patiently or reach out to support for assistance if issue re-occurs ";
   const aElement = document.createElement("a");
@@ -939,7 +941,7 @@ async function helperFn(apiEndPoint, formData) {
 
   if (
     obj.answer ===
-    "Please enter some valid question (number of characters >= 5)"
+    "Please enter some valid question (number of characters >= 5)" || obj.answer === "Exception in prediction using chatbot ID Function"
   ) {
     formData.delete("chatbotObj");
     formData.append(
