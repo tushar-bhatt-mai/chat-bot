@@ -30,7 +30,7 @@ body {
   width: 100%;
   display: flex;
   justify-content: flex-end;
-  margin-top: 15px;
+  /* margin-top: 15px; */
   position: relative;
 }
 .user-message,
@@ -39,6 +39,7 @@ body {
   padding: 10px;
   margin-top: 15px;
   border-radius: 0.5rem;
+  margin-left: -2px;
   display: flex;
   flex-wrap: wrap;
 }
@@ -51,7 +52,7 @@ body {
   background-color: var(--main-color);
 }
 .bot-messageDev {
-  margin: 25px 0;
+  /* margin: 25px 0; */
   position: relative;
 }
 
@@ -86,7 +87,7 @@ input[type="text"]:focus {
   box-shadow: 0 0 5px rgba(128, 46, 204, 0.8);
 }
 #initialValue {
-  margin-top: 15px !important;
+  margin-top: -22px !important;
   position: relative;
 }
 .suggestion-button {
@@ -337,6 +338,7 @@ input[type="text"]:focus {
   background-color: #eaf1f8;
   padding: 10px;
   margin-top: 15px;
+  margin-left: -1px;
   border-radius: 0.5rem;
   display: flex;
   flex-wrap: wrap;
@@ -344,6 +346,7 @@ input[type="text"]:focus {
 
 .loader-span-div {
   position: relative;
+  
 }
 
 .typing-animation {
