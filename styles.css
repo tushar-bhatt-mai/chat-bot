@@ -434,3 +434,8 @@ input[type="text"]:focus {
 .disabled-button{
   cursor: not-allowed !important;
 }
+
+.disabledLink{
+  cursor: not-allowed !important;
+  pointer-events:none;
+}

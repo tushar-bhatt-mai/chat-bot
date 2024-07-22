@@ -27,6 +27,8 @@ const {
   chatBotId = window?.WebChat?.chatBotId,
   sourceLanguageCode = "en",
   leadEnabled = true,
+  powerByText= window?.WebChat?.poweredByText || 'Maibot',
+  powerByTextLink= window?.WebChat?.poweredByTextLink || '',
 } = params || {};
 
 function removeStr(str) {
@@ -48,6 +50,8 @@ const baseUrlCostomization = `${trainingApi}get_chatbot_customization`;
 const storeChatHistory = `${trainingApi}store_guest_user_chat_history`;
 
 const storeUnmatchedChatHistory = `${trainingApi}store_guest_user_unmatch_query`;
+
+const defaultPowerByLink = 'https://maibot.net';
 
 // Function to display logged-in user data
 const loggedInUserData = (data) => {
@@ -80,6 +84,27 @@ document.addEventListener("DOMContentLoaded", function () {
 document.getElementById("user-input").addEventListener("input", function () {
   inputFieldHandler();
 });
+
+
+// Helper function to invoked set footer content dynamically
+
+function setFooterContent(){
+  const footerLink = document.querySelector(".strong");
+
+  if(footerLink){
+    footerLink.innerText = powerByText;
+    if (powerByText === "Maibot") {
+      footerLink.href = defaultPowerByLink;
+    } else if (powerByTextLink) {
+      footerLink.href = powerByTextLink;
+    } else {
+      footerLink.href = "javascript:void(0);";
+      footerLink.classList.add("disabledLink");
+    }
+  }
+
+}
+
 
 function changeBgColor(color) {
   const widgetElement = document.getElementById("mySvgElement");
@@ -127,6 +152,8 @@ function initialMessage() {
   setUserInputStyle();
   setInitialValue();
   setWidthAndPositionOfChatBot(width);
+  setFooterContent();
+
   if (chatBotResult?.suggested_messages) {
     displaySuggestedMessages(
       chatBotResult?.suggested_messages,
