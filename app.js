@@ -93,8 +93,6 @@ function setFooterContent(){
 
 
   if(footerLink){
-
-    console.log("setFooterContent", powerByText)
     footerLink.textContent = powerByText;
 
     if (powerByText === "Maibot") {
