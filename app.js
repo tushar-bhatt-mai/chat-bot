@@ -27,7 +27,7 @@ const {
   chatBotId = window?.WebChat?.chatBotId,
   sourceLanguageCode = "en",
   leadEnabled = true,
-  powerByText= window?.WebChat?.poweredByText || 'Maibot',
+  powerByText= window?.WebChat?.poweredByText || params.poweredByText ||  'Maibot',
   powerByTextLink= window?.WebChat?.poweredByTextLink || '',
 } = params || {};
 
@@ -91,8 +91,12 @@ document.getElementById("user-input").addEventListener("input", function () {
 function setFooterContent(){
   const footerLink = document.querySelector(".strong");
 
+
   if(footerLink){
-    footerLink.innerText = powerByText;
+
+    console.log("setFooterContent", powerByText)
+    footerLink.textContent = powerByText;
+
     if (powerByText === "Maibot") {
       footerLink.href = defaultPowerByLink;
     } else if (powerByTextLink) {
