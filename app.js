@@ -27,7 +27,7 @@ const {
   chatBotId = window?.WebChat?.chatBotId,
   sourceLanguageCode = "en",
   leadEnabled = true,
-  powerByText= window?.WebChat?.poweredByText || params.poweredByText ||  'Maibot',
+  powerByText= window?.WebChat?.poweredByText || params?.poweredByText ||  'Maibot',
   powerByTextLink= window?.WebChat?.poweredByTextLink || '',
 } = params || {};
 
