@@ -969,7 +969,7 @@ function addAppostrope(str){
     .replace(/\bshe'll\b/g, 'she will')
     .replace(/\bwe'll\b/g, 'we will')
     .replace(/\bthey'll\b/g, 'they will')
-    console.log("____________________>", result)
+    console.log("____________________>", result, str)
     return result
   }
 
