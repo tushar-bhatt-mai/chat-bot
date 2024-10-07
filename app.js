@@ -950,29 +950,31 @@ function handleRequestError(error) {
 
 //helper function for apppostorpe
 
-function addAppostrope(str){
+function addApostrophe(str) {
   const parseStr = str.toString();
   const result = parseStr
-  .replace(/\bI'm\b/g, 'I am')
-    .replace(/\bhe's\b/g, 'he is')
-    .replace(/\bshe's\b/g, 'she is')
-    .replace(/\bwe're\b/g, 'we are')
-    .replace(/\bthey're\b/g, 'they are')
-    .replace(/\bit's\b/g, 'it is')
-    .replace(/\bI've\b/g, 'I have')
-    .replace(/\bcan't\b/g, 'cannot')
-    .replace(/\bwon't\b/g, 'will not')
-    .replace(/\bdon't\b/g, 'do not')
-    .replace(/\bdidn't\b/g, 'did not')
-    .replace(/\bI'll\b/g, 'I will')
-    .replace(/\byou'll\b/g, 'you will')
-    .replace(/\bhe'll\b/g, 'he will')
-    .replace(/\bshe'll\b/g, 'she will')
-    .replace(/\bwe'll\b/g, 'we will')
-    .replace(/\bthey'll\b/g, 'they will')
-    console.log("____________________>", result, str)
-    return result
-  }
+    .replace(/I'm/gi, 'I am')
+    .replace(/he's/gi, 'he is')
+    .replace(/she's/gi, 'she is')
+    .replace(/we're/gi, 'we are')
+    .replace(/they're/gi, 'they are')
+    .replace(/it's/gi, 'it is')
+    .replace(/I've/gi, 'I have')
+    .replace(/can't/gi, 'cannot')
+    .replace(/won't/gi, 'will not')
+    .replace(/don't/gi, 'do not')
+    .replace(/didn't/gi, 'did not')
+    .replace(/I'll/gi, 'I will')
+    .replace(/you'll/gi, 'you will')
+    .replace(/he'll/gi, 'he will')
+    .replace(/she'll/gi, 'she will')
+    .replace(/we'll/gi, 'we will')
+    .replace(/they'll/gi, 'they will');
+
+  console.log("____________________>", result, str);
+  return result;
+}
+
 
 
 
