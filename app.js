@@ -652,7 +652,9 @@ function buildFormDataChatHistory(question, answer, flag, data) {
 
   formData.append("guest_unique_id", uniqueIdGenerator());
 
-  formData.append("chatbotObj", JSON.stringify({ question, answer }));
+  const modifiedQuestion = addAppostrope(question)
+
+  formData.append("chatbotObj", JSON.stringify({ modifiedQuestion, answer }));
 
   return formData;
 }
@@ -1026,7 +1028,7 @@ async function helperFn(apiEndPoint, formData) {
         const enabledLead = chatBotResult?.is_lead_capture;
         const formDataObj = objectToFormData({
           emailid: !enabledLead ? "" : userDetails.email,
-          question: obj?.question,
+          question: modifiedQuestion(obj?.question),
           created_at: apiResponse.created_at,
           ipAddress: userDetailResult.ip || "",
           "guest_unique_id": uniqueIdGenerator(),
