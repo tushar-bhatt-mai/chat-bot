@@ -950,7 +950,7 @@ function handleRequestError(error) {
 
 //helper function for apppostorpe
 
-function addApostrophe(str) {
+function addAppostrope(str) {
   const parseStr = str.toString();
   const result = parseStr
     .replace(/I'm/gi, 'I am')
