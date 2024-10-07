@@ -951,28 +951,8 @@ function handleRequestError(error) {
 //helper function for apppostorpe
 
 function addAppostrope(str) {
-  const parseStr = str.toString();
-  const result = parseStr
-    .replace(/I'm/gi, 'I am')
-    .replace(/he's/gi, 'he is')
-    .replace(/she's/gi, 'she is')
-    .replace(/we're/gi, 'we are')
-    .replace(/they're/gi, 'they are')
-    .replace(/it's/gi, 'it is')
-    .replace(/I've/gi, 'I have')
-    .replace(/can't/gi, 'cannot')
-    .replace(/won't/gi, 'will not')
-    .replace(/don't/gi, 'do not')
-    .replace(/didn't/gi, 'did not')
-    .replace(/I'll/gi, 'I will')
-    .replace(/you'll/gi, 'you will')
-    .replace(/he'll/gi, 'he will')
-    .replace(/she'll/gi, 'she will')
-    .replace(/we'll/gi, 'we will')
-    .replace(/they'll/gi, 'they will');
-
-  console.log("____________________>", result, str);
-  return result;
+const resultString = str.replace(/'/g, ' ');
+return resultString
 }
 
 
