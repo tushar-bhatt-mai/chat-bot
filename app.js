@@ -654,7 +654,7 @@ function buildFormDataChatHistory(question, answer, flag, data) {
 
   const modifiedQuestion = addAppostrope(question)
 
-  formData.append("chatbotObj", JSON.stringify({ modifiedQuestion, answer }));
+  formData.append("chatbotObj", JSON.stringify({ question: modifiedQuestion, answer }));
 
   return formData;
 }
