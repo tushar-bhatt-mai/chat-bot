@@ -951,7 +951,8 @@ function handleRequestError(error) {
 //helper function for apppostorpe
 
 function addAppostrope(str){
-  const result = str
+  const parseStr = str.toString();
+  const result = parseStr
   .replace(/\bI'm\b/g, 'I am')
     .replace(/\bhe's\b/g, 'he is')
     .replace(/\bshe's\b/g, 'she is')
