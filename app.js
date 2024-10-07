@@ -946,6 +946,31 @@ function handleRequestError(error) {
   removeLoadingIndicator();
 }
 
+//helper function for apppostorpe
+
+function addAppostrope(str){
+return str
+.replace(/\bI'm\b/g, 'I am')
+.replace(/\bhe's\b/g, 'he is')
+.replace(/\bshe's\b/g, 'she is')
+.replace(/\bwe're\b/g, 'we are')
+.replace(/\bthey're\b/g, 'they are')
+.replace(/\bit's\b/g, 'it is')
+.replace(/\bI've\b/g, 'I have')
+.replace(/\bcan't\b/g, 'cannot')
+.replace(/\bwon't\b/g, 'will not')
+.replace(/\bdon't\b/g, 'do not')
+.replace(/\bdidn't\b/g, 'did not')
+.replace(/\bI'll\b/g, 'I will')
+.replace(/\byou'll\b/g, 'you will')
+.replace(/\bhe'll\b/g, 'he will')
+.replace(/\bshe'll\b/g, 'she will')
+.replace(/\bwe'll\b/g, 'we will')
+.replace(/\bthey'll\b/g, 'they will');
+}
+
+
+
 async function recordUserChatHistory(apiUrl, formData) {
   try {
     const response = await fetch(apiUrl, {
@@ -976,7 +1001,7 @@ async function helperFn(apiEndPoint, formData) {
     formData.append(
       "chatbotObj",
       JSON.stringify({
-        question: obj.question,
+        question:addAppostrope(obj.question),
         answer:
           "Apologies, an error occurred. Please wait patiently or reach out to support for assistance if issue re-occurs",
       })
