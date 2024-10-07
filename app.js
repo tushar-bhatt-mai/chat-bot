@@ -951,25 +951,26 @@ function handleRequestError(error) {
 //helper function for apppostorpe
 
 function addAppostrope(str){
-return str
-.replace(/\bI'm\b/g, 'I am')
-.replace(/\bhe's\b/g, 'he is')
-.replace(/\bshe's\b/g, 'she is')
-.replace(/\bwe're\b/g, 'we are')
-.replace(/\bthey're\b/g, 'they are')
-.replace(/\bit's\b/g, 'it is')
-.replace(/\bI've\b/g, 'I have')
-.replace(/\bcan't\b/g, 'cannot')
-.replace(/\bwon't\b/g, 'will not')
-.replace(/\bdon't\b/g, 'do not')
-.replace(/\bdidn't\b/g, 'did not')
-.replace(/\bI'll\b/g, 'I will')
-.replace(/\byou'll\b/g, 'you will')
-.replace(/\bhe'll\b/g, 'he will')
-.replace(/\bshe'll\b/g, 'she will')
-.replace(/\bwe'll\b/g, 'we will')
-.replace(/\bthey'll\b/g, 'they will');
-}
+  const result = str
+  .replace(/\bI'm\b/g, 'I am')
+    .replace(/\bhe's\b/g, 'he is')
+    .replace(/\bshe's\b/g, 'she is')
+    .replace(/\bwe're\b/g, 'we are')
+    .replace(/\bthey're\b/g, 'they are')
+    .replace(/\bit's\b/g, 'it is')
+    .replace(/\bI've\b/g, 'I have')
+    .replace(/\bcan't\b/g, 'cannot')
+    .replace(/\bwon't\b/g, 'will not')
+    .replace(/\bdon't\b/g, 'do not')
+    .replace(/\bdidn't\b/g, 'did not')
+    .replace(/\bI'll\b/g, 'I will')
+    .replace(/\byou'll\b/g, 'you will')
+    .replace(/\bhe'll\b/g, 'he will')
+    .replace(/\bshe'll\b/g, 'she will')
+    .replace(/\bwe'll\b/g, 'we will')
+    .replace(/\bthey'll\b/g, 'they will')
+    return result
+  }
 
 
 
@@ -1028,7 +1029,7 @@ async function helperFn(apiEndPoint, formData) {
         const enabledLead = chatBotResult?.is_lead_capture;
         const formDataObj = objectToFormData({
           emailid: !enabledLead ? "" : userDetails.email,
-          question: modifiedQuestion(obj?.question),
+          question: addAppostrope(obj?.question),
           created_at: apiResponse.created_at,
           ipAddress: userDetailResult.ip || "",
           "guest_unique_id": uniqueIdGenerator(),
